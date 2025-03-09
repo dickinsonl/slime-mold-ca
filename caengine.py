@@ -128,7 +128,8 @@ def stateToBi(nbrhd, verbose=False):
         neighborhood = (neighborhood << offset) + cell
   return neighborhood
 
-def cycle(mat):
+# Method to iterate one tick of the CA, updating per the rulesets set within
+def cycle(mat): # TODO: CHANGE THIS METHOD TO ASSUME MAT IS IN BINARY
     new_map = np.copy(mat)
     height = np.size(mat,0)
     width = np.size(mat,1)
@@ -155,7 +156,7 @@ def cycle(mat):
             #Check if expansion vs contraction:
             size = 2**27 #2^27 for nonverbose, 2^57 for verbose
             if bistate < size: #In effect, checking to see if first bit is set to 0 (for expansion) or 1 (for contraction)
-                #rules
+                # RULES:
                 if center == 'o':
                     # print(f'(i,j): {i}, {j}, bistate: {(bistate)}, Binary: {bin(bistate)}')
                     if ((bistate & 28728) == 8) or ((bistate & 28728) == 32) or ((bistate & 28728) == 56) or ((bistate & 28728) == 40) or ((bistate & 28728) == 48):

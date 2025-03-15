@@ -112,39 +112,38 @@ def biToCell(bin, verbose=False):
         else:
               raise Exception(f'Invalid Binary: {bin:b}')
         
-        
-def stateToBi(nbrhd, verbose=False):
+# Method which takes a neighborhood state matrix and returns its numerical representation
+def stateToBi(nbrhd, isInputBinary=True, verbose=False):
+  offset = 4
   if verbose:
-    offset = 6
-  else:
-    offset = 3
+    offset += 3
 
   neighborhood = 0
   r = 0
   for row in nbrhd:
     r += 1
     for i in row:
-        cell = cellToBi(i, row=r, col=i)
+        cell = i if isInputBinary else cellToBi(i, row=r, col=i)
         neighborhood = (neighborhood << offset) + cell
   return neighborhood
 
 # Method to iterate one tick of the CA, updating per the rulesets set within
-def cycle(mat): # TODO: CHANGE THIS METHOD TO ASSUME MAT IS IN BINARY
+def cycle(mat, verbose = False): # TODO: CHANGE THIS METHOD TO ASSUME MAT IS IN BINARY
     new_map = np.copy(mat)
     height = np.size(mat,0)
     width = np.size(mat,1)
     for i in range(height):
         for j in range(width):
             #Use strings for now i guess but should possibly change these to binary later for speed
-            up = mat[i-1][j] if i > 0 else 'x'
-            down = mat[i+1][j] if i < (height-1) else 'x'
-            left = mat[i][j-1] if j > 0 else 'x'
-            right = mat[i][j+1] if j < (width-1) else 'x'
+            up = mat[i-1][j] if i > 0 else 0b011 #binary for a wall
+            down = mat[i+1][j] if i < (height-1) else 0b011
+            left = mat[i][j-1] if j > 0 else 0b011
+            right = mat[i][j+1] if j < (width-1) else 0b011
             #ul = upper left, etc
-            ul = mat[i-1][j-1] if i > 0 and j > 0 else 'x'
-            ur = mat[i-1][j+1] if j < (width-1) and i > 0 else 'x'
-            dl = mat[i+1][j-1] if j > 0 and i < (height-1) else 'x'
-            dr = mat[i+1][j+1] if i < (height-1) and j < (width-1) else 'x'
+            ul = mat[i-1][j-1] if i > 0 and j > 0 else 0b011
+            ur = mat[i-1][j+1] if j < (width-1) and i > 0 else 0b011
+            dl = mat[i+1][j-1] if j > 0 and i < (height-1) else 0b011
+            dr = mat[i+1][j+1] if i < (height-1) and j < (width-1) else 0b011
             center = mat[i][j]
 
             #Concat all of these starting with up, going clockwise, ending with the center
@@ -156,26 +155,31 @@ def cycle(mat): # TODO: CHANGE THIS METHOD TO ASSUME MAT IS IN BINARY
             #Check if expansion vs contraction:
             size = 2**27 #2^27 for nonverbose, 2^57 for verbose
             if bistate < size: #In effect, checking to see if first bit is set to 0 (for expansion) or 1 (for contraction)
+                # Cheatsheet:
+                # 00 -> up or o (empty)
+                # 01 -> right or s (source)
+                # 10 -> down or e (sink)
+                # 11 -> left or x (wall)
                 # RULES:
-                if center == 'o':
+                if biToCell(center) == 'o':
                     # print(f'(i,j): {i}, {j}, bistate: {(bistate)}, Binary: {bin(bistate)}')
                     if ((bistate & 28728) == 8) or ((bistate & 28728) == 32) or ((bistate & 28728) == 56) or ((bistate & 28728) == 40) or ((bistate & 28728) == 48):
-                        new_map[i][j] = 'u'                
+                        new_map[i][j] = 0b100                
                     elif ((bistate & 258048) == 32768) or ((bistate & 258048) == 131072) or ((bistate & 258048) == 229376) or ((bistate & 258048) == 163840) or ((bistate & 258048) == 196608):
-                        new_map[i][j] = 'r'
+                        new_map[i][j] = 0b101
                     elif ((bistate & 14708736) == 2097152) or ((bistate & 14708736) == 8388608) or ((bistate & 14708736) == 14680064) or ((bistate & 14708736) == 10485760) or ((bistate & 14708736) == 12582912):
-                        new_map[i][j] = 'd'
+                        new_map[i][j] = 0b110
                     elif ((bistate & 32256) == 512) or ((bistate & 32256) == 2048) or ((bistate & 32256) == 3584) or ((bistate & 32256) == 2560) or ((bistate & 32256) == 3072):
-                        new_map[i][j] = 'l'
+                        new_map[i][j] = 0b111
                 #elif ((bistate & 56) == 16) or ((bistate & 229376) == 65536) or ((bistate & 14680064) == 4194304) or ((bistate & 3584) == 1024):
                    # Contraction
                    # new_map[i][j] = 'c'+center  
     return new_map
 
 def mapToBi(map, verbose = False):
-    bimap = np.copy(map)
     height = np.size(map,0)
     width = np.size(map,1)
+    bimap = np.zeros((height, width), dtype=int)
     if verbose: #aka if the pressure/capacity is included
         raise Exception("Error, verbose mode not yet implemented")
     else: #only directional model

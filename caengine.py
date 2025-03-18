@@ -80,7 +80,7 @@ def biToCell(bin, verbose=False):
         prefix = cap << 2
         if sym == 0b00:
           suffix = 'u'
-        elif sym == 0b10:
+        elif sym == 0b01:
           suffix = 'r'
         elif sym == 0b10:
           suffix = 'd'
@@ -104,11 +104,11 @@ def biToCell(bin, verbose=False):
         if bin == 0b100:
             return 'u'
         elif bin == 0b101:
-            return 'd'
-        elif bin == 0b110:
-            return 'l'
-        elif bin == 0b111:
             return 'r'
+        elif bin == 0b110:
+            return 'd'
+        elif bin == 0b111:
+            return 'l'
         else:
               raise Exception(f'Invalid Binary: {bin:b}')
         
@@ -127,11 +127,18 @@ def stateToBi(nbrhd, isInputBinary=True, verbose=False):
         neighborhood = (neighborhood << offset) + cell
   return neighborhood
 
-# Method to iterate one tick of the CA, updating per the rulesets set within
-def cycle(mat, verbose = False): # TODO: CHANGE THIS METHOD TO ASSUME MAT IS IN BINARY
+# Method to iterate one tick of the CA, updating per the rulesets set within.
+# mat: binary matrix
+# verbose: tells method whether or not to use capacity model
+def cycle(mat, verbose = False):
     new_map = np.copy(mat)
     height = np.size(mat,0)
     width = np.size(mat,1)
+
+    offset = 4
+    if verbose:
+       offset += 3
+
     for i in range(height):
         for j in range(width):
             #Use strings for now i guess but should possibly change these to binary later for speed
@@ -153,8 +160,8 @@ def cycle(mat, verbose = False): # TODO: CHANGE THIS METHOD TO ASSUME MAT IS IN 
             bistate = stateToBi(cur_state) #find binary neighborhood state representation
 
             #Check if expansion vs contraction:
-            size = 2**27 #2^27 for nonverbose, 2^57 for verbose
-            if bistate < size: #In effect, checking to see if first bit is set to 0 (for expansion) or 1 (for contraction)
+            contract_bit = center >= 2**(offset-1) #total is 2^27 for nonverbose, 2^57 for verbose
+            if not contract_bit: #In effect, checking to see if first bit is set to 0 (for expansion) or 1 (for contraction)
                 # Cheatsheet:
                 # 00 -> up or o (empty)
                 # 01 -> right or s (source)
@@ -162,18 +169,38 @@ def cycle(mat, verbose = False): # TODO: CHANGE THIS METHOD TO ASSUME MAT IS IN 
                 # 11 -> left or x (wall)
                 # RULES:
                 if biToCell(center) == 'o':
-                    # print(f'(i,j): {i}, {j}, bistate: {(bistate)}, Binary: {bin(bistate)}')
-                    if ((bistate & 28728) == 8) or ((bistate & 28728) == 32) or ((bistate & 28728) == 56) or ((bistate & 28728) == 40) or ((bistate & 28728) == 48):
-                        new_map[i][j] = 0b100                
-                    elif ((bistate & 258048) == 32768) or ((bistate & 258048) == 131072) or ((bistate & 258048) == 229376) or ((bistate & 258048) == 163840) or ((bistate & 258048) == 196608):
-                        new_map[i][j] = 0b101
-                    elif ((bistate & 14708736) == 2097152) or ((bistate & 14708736) == 8388608) or ((bistate & 14708736) == 14680064) or ((bistate & 14708736) == 10485760) or ((bistate & 14708736) == 12582912):
-                        new_map[i][j] = 0b110
-                    elif ((bistate & 32256) == 512) or ((bistate & 32256) == 2048) or ((bistate & 32256) == 3584) or ((bistate & 32256) == 2560) or ((bistate & 32256) == 3072):
-                        new_map[i][j] = 0b111
+                    #print(f'(i,j): {i}, {j}, bistate & mask: {(bistate)}, Binary: {bin(bistate)}')
+                    # Rule format is (bistate & mask) == check
+                    if (((bistate & 983280) == 16) or 
+                        ((bistate & 983280) == 64) or 
+                        ((bistate & 983280) == 112) or 
+                        ((bistate & 983280) == 80) or 
+                        ((bistate & 983280) == 96)):
+                        new_map[i][j] = 0b100 # UP               
+                    elif (((bistate & 16711680) == 1048576) or 
+                          ((bistate & 16711680) == 4194304) or 
+                          ((bistate & 16711680) == 7340032) or 
+                          ((bistate & 16711680) == 5242880) or 
+                          ((bistate & 16711680) == 6291456)):
+                        new_map[i][j] = 0b101 # RIGHT
+                    elif (((bistate & 4027514880) == 268435456) or 
+                          ((bistate & 4027514880) == 1073741824) or 
+                          ((bistate & 4027514880) == 1879048192) or 
+                          ((bistate & 4027514880) == 1342177280) or 
+                          ((bistate & 4027514880) == 1610612736)):
+                        new_map[i][j] = 0b110 # DOWN
+                    elif (((bistate & 1044480) == 4096) or 
+                          ((bistate & 1044480) == 16384) or 
+                          ((bistate & 1044480) == 28672) or 
+                          ((bistate & 1044480) == 20480) or 
+                          ((bistate & 1044480) == 24576)):
+                        new_map[i][j] = 0b111 # LEFT
                 #elif ((bistate & 56) == 16) or ((bistate & 229376) == 65536) or ((bistate & 14680064) == 4194304) or ((bistate & 3584) == 1024):
                    # Contraction
                    # new_map[i][j] = 'c'+center  
+
+                    # if i == 1 and j == 0:
+                    #     print(f'curr_map: {cur_state} new cell: {(new_map[i][j]):04b}')
     return new_map
 
 def mapToBi(map, verbose = False):
@@ -191,8 +218,8 @@ def mapToBi(map, verbose = False):
       
 
 #WIP:
-def animate(frames, intrvl, mat):
-    fig, ax = plt.subplots(figsize=(10,10))
+# def animate(frames, intrvl, mat):
+#     fig, ax = plt.subplots(figsize=(10,10))
     # ims = []
 
     # for i in range(frames):
@@ -200,5 +227,5 @@ def animate(frames, intrvl, mat):
     #     ims.append([ims])
     #     mat = cycle(mat)
     # plt.close
-    a = FuncAnimation(mat, cycle, interval = 50, repeat = True)
-    plt.show
+    # a = FuncAnimation(mat, cycle, interval = 50, repeat = True)
+    # plt.show

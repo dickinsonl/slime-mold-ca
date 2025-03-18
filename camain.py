@@ -24,6 +24,7 @@ for i in range(rows):
 def printMap(map, isInputBinary=True, printBinary=False):
     if isInputBinary:
         if printBinary: 
+          # This is the only branch of the conditional that prints here, otherwise printing is done at the end
           for i in range(rows):
               for j in range(cols):
                   print(f"{map[i][j]:04b}", end=' ')
@@ -33,11 +34,14 @@ def printMap(map, isInputBinary=True, printBinary=False):
         for i in range(rows):
             for j in range(cols):
                 newmap[i][j] = caengine.biToCell(map[i][j])
+                #print(f'old: {map[i][j]:04b}, new:{newmap[i][j]}')
     elif printBinary:
         newmap = np.empty((rows, cols), dtype=int)
         for i in range(rows):
             for j in range(cols):
                 newmap[i][j] = caengine.cellToBi(map[i][j])
+
+    #Doing the actual printing            
     for i in range(rows):
         line = ''
         m = newmap if isInputBinary else map
@@ -47,9 +51,10 @@ def printMap(map, isInputBinary=True, printBinary=False):
 
 bimap = caengine.mapToBi(map)
 printMap(bimap, isInputBinary=True)
-for i in range(50): 
+for i in range(10): 
     bimap = caengine.cycle(bimap,)
-print()
+print(bimap)
+printMap(bimap, isInputBinary=True, printBinary=True)
 printMap(bimap, isInputBinary=True, printBinary=False)
 
 #caengine.animate(2,50,map)

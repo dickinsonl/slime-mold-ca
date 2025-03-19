@@ -63,9 +63,11 @@ def cellToBi(cell, verbose=False, row=-1, col=-1):
               raise Exception(f'Invalid Symbol: {cell} at ({row}, {col})')
           
 # Input is binary representation of a cell, output is the character for that cell.
+# Currently this does not display if a cell is contracting or expanding
 def biToCell(bin, verbose=False):
   # Verbose version includes the capacities in 6 bit state output, otherwise it gives 3 bit concise version without capacity
   if verbose:
+    bin = bin % 0b1000000 
     if bin == 0b000000:
       return 'o'
     elif bin == 0b000001:
@@ -76,7 +78,7 @@ def biToCell(bin, verbose=False):
         return 'x'
     else:
         sym = bin % 0b100
-        cap = bin >> 2
+        cap = bin >> 2 #This and the next line could probably be consolidated to one pretty easily
         prefix = cap << 2
         if sym == 0b00:
           suffix = 'u'
@@ -91,6 +93,7 @@ def biToCell(bin, verbose=False):
           return -1
         return prefix + suffix
   else: #Special characters (start with 0)
+    bin = bin % 0b1000 
     if bin == 0b000:
         return 'o'
     elif bin == 0b001:
@@ -136,8 +139,10 @@ def cycle(mat, verbose = False):
     width = np.size(mat,1)
 
     offset = 4
+    contract_value = 0b1000
     if verbose:
        offset += 3
+       contract_value = 0b10000000 #TODO: CHECK TO MAKE SURE THIS VALUE IS RIGHT
 
     for i in range(height):
         for j in range(width):
@@ -167,6 +172,11 @@ def cycle(mat, verbose = False):
                 # 01 -> right or s (source)
                 # 10 -> down or e (sink)
                 # 11 -> left or x (wall)
+                u = 0b0100
+                r = 0b0101
+                d = 0b0110
+                l = 0b0111
+                
                 # RULES:
                 if biToCell(center) == 'o':
                     #print(f'(i,j): {i}, {j}, bistate & mask: {(bistate)}, Binary: {bin(bistate)}')
@@ -176,29 +186,30 @@ def cycle(mat, verbose = False):
                         ((bistate & 983280) == 112) or 
                         ((bistate & 983280) == 80) or 
                         ((bistate & 983280) == 96)):
-                        new_map[i][j] = 0b100 # UP               
+                        new_map[i][j] = u # UP               
                     elif (((bistate & 16711680) == 1048576) or 
                           ((bistate & 16711680) == 4194304) or 
                           ((bistate & 16711680) == 7340032) or 
                           ((bistate & 16711680) == 5242880) or 
                           ((bistate & 16711680) == 6291456)):
-                        new_map[i][j] = 0b101 # RIGHT
+                        new_map[i][j] = r # RIGHT
                     elif (((bistate & 4027514880) == 268435456) or 
                           ((bistate & 4027514880) == 1073741824) or 
                           ((bistate & 4027514880) == 1879048192) or 
                           ((bistate & 4027514880) == 1342177280) or 
                           ((bistate & 4027514880) == 1610612736)):
-                        new_map[i][j] = 0b110 # DOWN
+                        new_map[i][j] = d # DOWN
                     elif (((bistate & 1044480) == 4096) or 
                           ((bistate & 1044480) == 16384) or 
                           ((bistate & 1044480) == 28672) or 
                           ((bistate & 1044480) == 20480) or 
                           ((bistate & 1044480) == 24576)):
-                        new_map[i][j] = 0b111 # LEFT
-                #elif ((bistate & 56) == 16) or ((bistate & 229376) == 65536) or ((bistate & 14680064) == 4194304) or ((bistate & 3584) == 1024):
-                   # Contraction
-                   # new_map[i][j] = 'c'+center  
-
+                        new_map[i][j] = l # LEFT
+                elif ((center == u or center == r or center == d or center == l) and 
+                      (0b0010 in cur_state[0] or 0b0010 in cur_state[1] or 0b0010 in cur_state[2])):
+                    # Contraction
+                    new_map[i][j] = new_map[i][j] + contract_value
+                    
                     # if i == 1 and j == 0:
                     #     print(f'curr_map: {cur_state} new cell: {(new_map[i][j]):04b}')
     return new_map

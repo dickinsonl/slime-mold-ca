@@ -3,7 +3,7 @@ import time
 import numpy as np
 
 start_time = time.time()
-f = open('med1.txt', "r")
+f = open('small1.txt', "r")
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 
 map = [0]*rows

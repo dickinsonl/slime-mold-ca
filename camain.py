@@ -3,7 +3,8 @@ import time
 import numpy as np
 
 start_time = time.time()
-f = open('small1.txt', "r")
+f = open('contracttest.txt', "r")
+num_cycles = 12
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 
 map = [0]*rows
@@ -51,7 +52,7 @@ def printMap(map, isInputBinary=True, printBinary=False):
 
 bimap = caengine.mapToBi(map)
 printMap(bimap, isInputBinary=True)
-for i in range(10): 
+for i in range(num_cycles): 
     bimap = caengine.cycle(bimap,)
 print(bimap)
 printMap(bimap, isInputBinary=True, printBinary=True)

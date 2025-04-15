@@ -53,11 +53,11 @@ def cellToBi(cell, verbose=False, row=-1, col=-1):
           cell = cell[0]
           if cell == 'u':
               return 0b100
-          elif cell == 'd':
-              return 0b101
-          elif cell == 'l':
-              return 0b110
           elif cell == 'r':
+              return 0b101
+          elif cell == 'd':
+              return 0b110
+          elif cell == 'l':
               return 0b111
           else:
               raise Exception(f'Invalid Symbol: {cell} at ({row}, {col})')
@@ -205,13 +205,36 @@ def cycle(mat, verbose = False):
                           ((bistate & 1044480) == 20480) or 
                           ((bistate & 1044480) == 24576)):
                         new_map[i][j] = l # LEFT
+
+                #BRANCH TO PROPAGATE CONTRACTION SIGNAL:
                 elif ((center == u or center == r or center == d or center == l) and 
-                      (0b0010 in cur_state[0] or 0b0010 in cur_state[1] or 0b0010 in cur_state[2])):
-                    # Contraction
+                      ((0b0010 in cur_state[0] or 0b0010 in cur_state[1] or 0b0010 in cur_state[2]) or # checking if next to the sink
+                      (x >= contract_value for x in cur_state))): #checking if next to other contraction cell
+                    # if (x >= contract_value for x in cur_state):
+                    #     print(f'success to this one bugcheck')
+                        
+                            # for i in cur_state:
+                            #     for x in cur_state[i]
+                        # Contraction
                     new_map[i][j] = new_map[i][j] + contract_value
-                    
-                    # if i == 1 and j == 0:
-                    #     print(f'curr_map: {cur_state} new cell: {(new_map[i][j]):04b}')
+
+                
+            #BRANCH TO UNDERGO CONTRACTION:
+            else:
+                o = 0b0000
+                
+                ncount = neighborCount(cur_state)
+                # Simple rule if live cells only have less than two live neighbors
+                if center == 0b1100:
+                    print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68719472640):b}\ncheck:   {12938653696:b}')
+                    printNeighborhood(cur_state)
+                if (ncount < 2 or
+                    ((bistate & 68719472640) == 12938653696) or #contraction rule 1. from ruleset spreadsheet
+                    ((bistate & 4279234815) == 855965747) or 
+                    ((bistate & 16777215) == 3552003) or 
+                    ((bistate & 68467757040) == 13690667824)):
+                    new_map[i][j] = o
+
     return new_map
 
 def mapToBi(map, verbose = False):
@@ -221,13 +244,48 @@ def mapToBi(map, verbose = False):
     if verbose: #aka if the pressure/capacity is included
         raise Exception("Error, verbose mode not yet implemented")
     else: #only directional model
-      for i in range(height):
-        for j in range(width):
-           bimap[i][j] = cellToBi(map[i][j])
+          for i in range(height):
+            for j in range(width):
+                   bimap[i][j] = cellToBi(map[i][j])
     return bimap
-      
-      
 
+def biToState(bi, verbose=False, isCheck=False):
+  if verbose:
+    offset = 0b10000000
+    shift = 7
+  else:
+    offset = 0b10000
+    shift = 4
+  neighborhood = [['','',''],
+                  ['','',''],
+                  ['','','']]
+  for j in [2,1,0]:
+    row = neighborhood[j]
+    for i in [2,1,0]:
+        bicell = bi % offset
+        bi = bi >> shift
+        cell = biToCell(bicell, isCheck)
+        #print(f"Cell: {cell}")
+        row[i] = cell
+  return neighborhood
+
+# Used for debugging, prints a neighborhood given as parameter nbrhd
+def printNeighborhood(nbrhd, verbose=False):
+    for row in nbrhd:
+        print(biToCell(row[0], verbose) + biToCell(row[1], verbose) + biToCell(row[2], verbose))
+    print()
+
+# Count the number of live cells in the neighborhood
+def neighborCount(nbrhd, verbose=False):
+    count = 0
+    contract = 0b1000
+    for i in range(3):
+        for j in range(3):
+            if i != 1 or j != 1:
+                n = nbrhd[i][j] % contract
+                if n >= 0b100 and n <= 0b111:
+                    count += 1
+    return count
 #WIP:
 # def animate(frames, intrvl, mat):
 #     fig, ax = plt.subplots(figsize=(10,10))

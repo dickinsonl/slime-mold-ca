@@ -176,7 +176,8 @@ def cycle(mat, verbose = False):
                 r = 0b0101
                 d = 0b0110
                 l = 0b0111
-                
+                s = 0b0001
+
                 # RULES:
                 if biToCell(center) == 'o':
                     #print(f'(i,j): {i}, {j}, bistate & mask: {(bistate)}, Binary: {bin(bistate)}')
@@ -207,7 +208,7 @@ def cycle(mat, verbose = False):
                         new_map[i][j] = l # LEFT
 
                 #BRANCH TO PROPAGATE CONTRACTION SIGNAL:
-                elif ((center == u or center == r or center == d or center == l) and 
+                elif ((center == u or center == r or center == d or center == l or center == s) and 
                       ((0b0010 in cur_state[0] or 0b0010 in cur_state[1] or 0b0010 in cur_state[2]) or # checking if next to the sink
                       (x >= contract_value for x in cur_state))): #checking if next to other contraction cell
                     # if (x >= contract_value for x in cur_state):
@@ -224,15 +225,15 @@ def cycle(mat, verbose = False):
                 o = 0b0000
                 
                 ncount = neighborCount(cur_state)
-                # Simple rule if live cells only have less than two live neighbors
-                if center == 0b1100:
-                    print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68719472640):b}\ncheck:   {12938653696:b}')
-                    printNeighborhood(cur_state)
-                if (ncount < 2 or
-                    ((bistate & 68719472640) == 12938653696) or #contraction rule 1. from ruleset spreadsheet
-                    ((bistate & 4279234815) == 855965747) or 
-                    ((bistate & 16777215) == 3552003) or 
-                    ((bistate & 68467757040) == 13690667824)):
+                
+                # if center == 0b1100:
+                #     print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68719472640):b}\ncheck:   {12939177984:b}')
+                #     printNeighborhood(cur_state)
+                if (ncount < 2 or # Simple rule if live cells only have less than two live neighbors
+                    ((bistate & 68719472640) == 12939177984) or #contraction rule 1. from ruleset spreadsheet
+                    ((bistate & 4279234815) == 856490035) or 
+                    ((bistate & 16777215) == 4076291) or 
+                    ((bistate & 68467757040) == 13691192112)):
                     new_map[i][j] = o
 
     return new_map

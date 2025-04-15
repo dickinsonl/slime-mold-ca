@@ -4,7 +4,7 @@ import numpy as np
 
 start_time = time.time()
 f = open('contracttest.txt', "r")
-num_cycles = 12
+num_cycles = 10
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 
 map = [0]*rows

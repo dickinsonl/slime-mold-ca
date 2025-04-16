@@ -3,4 +3,4 @@
 x o x
 x o x
 o s o
-o o e
+x o e

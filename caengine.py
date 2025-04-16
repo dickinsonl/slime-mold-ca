@@ -222,18 +222,59 @@ def cycle(mat, verbose = False):
                 
             #BRANCH TO UNDERGO CONTRACTION:
             else:
+                # Cheatsheet:
+                # 00 -> up or o (empty)
+                # 01 -> right or s (source)
+                # 10 -> down or e (sink)
+                # 11 -> left or x (wall)
                 o = 0b0000
                 
                 ncount = neighborCount(cur_state)
                 
-                # if center == 0b1100:
-                #     print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68719472640):b}\ncheck:   {12939177984:b}')
+                # if center == 0b1111:
+                #     print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68467757040):b}\ncheck:   {13694337840:b}')
                 #     printNeighborhood(cur_state)
                 if (ncount < 2 or # Simple rule if live cells only have less than two live neighbors
-                    ((bistate & 68719472640) == 12939177984) or #contraction rule 1. from ruleset spreadsheet
+                    ((bistate & 68719472640) == 13744484352) or # contraction rule 0. from ruleset spreadsheet
+                    ((bistate & 4279234815) == 856502323) or
+                    ((bistate & 16777215) == 4076339) or
+                    ((bistate & 68467757040) == 13694337840) or
+                
+                    ((bistate & 68719472640) == 12939177984) or # contraction rule 1
                     ((bistate & 4279234815) == 856490035) or 
                     ((bistate & 16777215) == 4076291) or 
-                    ((bistate & 68467757040) == 13691192112)):
+                    ((bistate & 68467757040) == 13691192112) or
+
+                    ((bistate & 68719472640) == 54341632) or # contraction rule 2
+                    ((bistate & 4279234815) == 806223923) or
+                    ((bistate & 16777215) == 4141824) or
+                    ((bistate & 68467757040) == 13690994736) or
+
+                    ((bistate & 68719472640) == 12888846336) or # rule 2 flipped
+                    ((bistate & 4279234815) == 856490032) or
+                    ((bistate & 16777215) == 4075523) or
+                    ((bistate & 68467757040) == 806290224) or
+
+                    ((bistate & 68719472640) == 3944448) or # contraction rule 3
+                    ((bistate & 4279234815) == 806158384) or
+                    ((bistate & 16777215) == 4075520) or
+                    ((bistate & 68467757040) == 806289456) or
+
+                    ((bistate & 68719472640) == 13744472064) or # contraction rule 4
+                    ((bistate & 4279234815) == 856502275) or
+                    ((bistate & 16777215) == 930611) or
+                    ((bistate & 68467757040) == 12889031472) or
+                    
+                    ((bistate & 68719472640) == 13694152704) or # contraction rule 5
+                    ((bistate & 4279234815) == 856502320) or
+                    ((bistate & 16777215) == 4075571) or
+                    ((bistate & 68467757040) == 809435952) or
+
+                    ((bistate & 68719472640) == 859582464) or # rule 5 reflection
+                    ((bistate & 4279234815) == 806170675) or
+                    ((bistate & 16777215) == 4076336) or
+                    ((bistate & 68467757040) == 13694337072)):
+                    print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
                     new_map[i][j] = o
 
     return new_map
@@ -284,7 +325,7 @@ def neighborCount(nbrhd, verbose=False):
         for j in range(3):
             if i != 1 or j != 1:
                 n = nbrhd[i][j] % contract
-                if n >= 0b100 and n <= 0b111:
+                if (n >= 0b100 and n <= 0b111) or (n == 0b10 or n == 0b01):
                     count += 1
     return count
 #WIP:

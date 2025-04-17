@@ -228,12 +228,13 @@ def cycle(mat, verbose = False):
                 # 10 -> down or e (sink)
                 # 11 -> left or x (wall)
                 o = 0b0000
-                
+                e = 0b0010
                 ncount = neighborCount(cur_state)
                 
                 # if center == 0b1111:
                 #     print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68467757040):b}\ncheck:   {13694337840:b}')
                 #     printNeighborhood(cur_state)
+
                 if (ncount < 2 or # Simple rule if live cells only have less than two live neighbors
                     ((bistate & 68719472640) == 13744484352) or # contraction rule 0. from ruleset spreadsheet
                     ((bistate & 4279234815) == 856502323) or
@@ -273,7 +274,17 @@ def cycle(mat, verbose = False):
                     ((bistate & 68719472640) == 859582464) or # rule 5 reflection
                     ((bistate & 4279234815) == 806170675) or
                     ((bistate & 16777215) == 4076336) or
-                    ((bistate & 68467757040) == 13694337072)):
+                    ((bistate & 68467757040) == 13694337072) or
+                    
+                    ((bistate & 68703744015) == 13741338627) or # contraction rule 6
+                    ((bistate & 252706815) == 51196723) or
+                    ((bistate & 64441225215) == 12888965939) or
+                    ((bistate & 68719415040) == 13744669440) or
+
+                    ((bistate & 68719415040) == 13744472832) or # rule 6 reflection
+                    ((bistate & 68703744015) == 13741404163) or
+                    ((bistate & 252706815) == 51262259) or
+                    ((bistate & 64441225215) == 12889031475)):
                     print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
                     new_map[i][j] = o
 

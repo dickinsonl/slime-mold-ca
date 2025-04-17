@@ -3,7 +3,8 @@ import time
 import numpy as np
 
 start_time = time.time()
-f = open('med2.txt', "r")
+MAP_NAME = 'med2.txt'
+f = open(MAP_NAME, "r")
 num_cycles = 40
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 

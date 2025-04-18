@@ -166,17 +166,18 @@ def cycle(mat, verbose = False):
 
             #Check if expansion vs contraction:
             contract_bit = center >= 2**(offset-1) #total is 2^27 for nonverbose, 2^57 for verbose
+            u = 0b0100
+            r = 0b0101
+            d = 0b0110
+            l = 0b0111
+            s = 0b0001
             if not contract_bit: #In effect, checking to see if first bit is set to 0 (for expansion) or 1 (for contraction)
                 # Cheatsheet:
                 # 00 -> up or o (empty)
                 # 01 -> right or s (source)
                 # 10 -> down or e (sink)
                 # 11 -> left or x (wall)
-                u = 0b0100
-                r = 0b0101
-                d = 0b0110
-                l = 0b0111
-                s = 0b0001
+                
 
                 # RULES:
                 if biToCell(center) == 'o':
@@ -235,60 +236,87 @@ def cycle(mat, verbose = False):
                 #     print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68467757040):b}\ncheck:   {13694337840:b}')
                 #     printNeighborhood(cur_state)
 
-                if (ncount < 2 or # Simple rule if live cells only have less than two live neighbors
-                    ((bistate & 68719472640) == 13744484352) or # contraction rule 0. from ruleset spreadsheet
-                    ((bistate & 4279234815) == 856502323) or
-                    ((bistate & 16777215) == 4076339) or
-                    ((bistate & 68467757040) == 13694337840) or
+                if (isLive(center) and
+                    ncount < 2 or # Simple rule if live cells only have less than two live neighbors
+                    # contraction rule 0. from ruleset spreadsheet:
+                    ((bistate & 68718489600) == 13743697920) or
+                    ((bistate & 4278251775) == 855650355) or
+                    ((bistate & 15794175) == 3158835) or
+                    ((bistate & 68466774000) == 13693354800) or
                 
-                    ((bistate & 68719472640) == 12939177984) or # contraction rule 1
-                    ((bistate & 4279234815) == 856490035) or 
-                    ((bistate & 16777215) == 4076291) or 
-                    ((bistate & 68467757040) == 13691192112) or
+                     # contraction rule 1
+                    ((bistate & 68718489600) == 12938391552) or
+                    ((bistate & 4278251775) == 855638067) or
+                    ((bistate & 15794175) == 3158787) or
+                    ((bistate & 68466774000) == 13690209072) or
 
-                    ((bistate & 68719472640) == 54341632) or # contraction rule 2
-                    ((bistate & 4279234815) == 806223923) or
-                    ((bistate & 16777215) == 4141824) or
-                    ((bistate & 68467757040) == 13690994736) or
+                    # contraction rule 2
+                    ((bistate & 68718489600) == 53489664) or
+                    ((bistate & 4278251775) == 805306419) or
+                    ((bistate & 15794175) == 3158784) or
+                    ((bistate & 68466774000) == 13690208304) or
 
-                    ((bistate & 68719472640) == 12888846336) or # rule 2 flipped
-                    ((bistate & 4279234815) == 856490032) or
-                    ((bistate & 16777215) == 4075523) or
-                    ((bistate & 68467757040) == 806290224) or
+                    # rule 2 flipped
+                    ((bistate & 68718489600) == 12888059904) or
+                    ((bistate & 4278251775) == 855638064) or
+                    ((bistate & 15794175) == 3158019) or
+                    ((bistate & 68466774000) == 805307184) or
+                
+                    # contraction rule 3
+                    ((bistate & 68718489600) == 3158016) or
+                    ((bistate & 4278251775) == 805306416) or
+                    ((bistate & 15794175) == 3158016) or
+                    ((bistate & 68466774000) == 805306416) or
 
-                    ((bistate & 68719472640) == 3944448) or # contraction rule 3
-                    ((bistate & 4279234815) == 806158384) or
-                    ((bistate & 16777215) == 4075520) or
-                    ((bistate & 68467757040) == 806289456) or
+                    # contraction rule 4
+                    ((bistate & 68718489600) == 13743685632) or
+                    ((bistate & 4278251775) == 855650307) or
+                    ((bistate & 15794175) == 13107) or
+                    ((bistate & 68466774000) == 12888048432) or
 
-                    ((bistate & 68719472640) == 13744472064) or # contraction rule 4
-                    ((bistate & 4279234815) == 856502275) or
-                    ((bistate & 16777215) == 930611) or
-                    ((bistate & 68467757040) == 12889031472) or
+                    # rule 4 reflection
+                    ((bistate & 68718489600) == 13740552192) or
+                    ((bistate & 4278251775) == 50343987) or
+                    ((bistate & 15794175) == 3146547) or
+                    ((bistate & 68466774000) == 13693354752) or
                     
-                    ((bistate & 68719472640) == 13694152704) or # contraction rule 5
-                    ((bistate & 4279234815) == 856502320) or
-                    ((bistate & 16777215) == 4075571) or
-                    ((bistate & 68467757040) == 809435952) or
+                    # contraction rule 5
+                    ((bistate & 68718489600) == 13693366272) or
+                    ((bistate & 4278251775) == 855650352) or
+                    ((bistate & 15794175) == 3158067) or
+                    ((bistate & 68466774000) == 808452912) or
 
-                    ((bistate & 68719472640) == 859582464) or # rule 5 reflection
-                    ((bistate & 4279234815) == 806170675) or
-                    ((bistate & 16777215) == 4076336) or
-                    ((bistate & 68467757040) == 13694337072) or
+                    # rule 5 reflection
+                    ((bistate & 68718489600) == 858796032) or
+                    ((bistate & 4278251775) == 805318707) or
+                    ((bistate & 15794175) == 3158832) or
+                    ((bistate & 68466774000) == 13693354032) or
                     
-                    ((bistate & 68703744015) == 13741338627) or # contraction rule 6
-                    ((bistate & 252706815) == 51196723) or
-                    ((bistate & 64441225215) == 12888965939) or
-                    ((bistate & 68719415040) == 13744669440) or
+                    # contraction rule 6
+                    ((bistate & 68702760975) == 13740552195) or
+                    ((bistate & 251723775) == 50344755) or
+                    ((bistate & 64440242175) == 12888048435) or
+                    ((bistate & 68718432000) == 13743686400) or
+                    
+                    # contraction rule 7
+                    ((bistate & 68718489600) == 53477376) or
+                    ((bistate & 4278251775) == 805306371) or
+                    ((bistate & 15794175) == 13056) or
+                    ((bistate & 68466774000) == 12884901936) or
 
-                    ((bistate & 68719415040) == 13744472832) or # rule 6 reflection
-                    ((bistate & 68703744015) == 13741404163) or
-                    ((bistate & 252706815) == 51262259) or
-                    ((bistate & 64441225215) == 12889031475)):
-                    print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
+                    #rule 7 reflection
+                    ((bistate & 68718489600) == 12884914176) or
+                    ((bistate & 4278251775) == 50331696) or
+                    ((bistate & 15794175) == 3145731) or
+                    ((bistate & 68466774000) == 805307136)):
+                    # print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
                     new_map[i][j] = o
-
     return new_map
+
+def isLive(cell, verbose = False):
+    contract = 0b1000
+    cell = cell % contract
+    return (cell >= 0b0100 and cell <= 0b0111)
 
 def mapToBi(map, verbose = False):
     height = np.size(map,0)

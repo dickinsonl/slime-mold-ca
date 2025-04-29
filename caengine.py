@@ -1,21 +1,22 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import rules
 #import ffmpeg
 #from IPython.display import HTML
 #import matplotlib.animation as animation
 
 # Function which takes in a cell state and returns a binary literal of that state
-# 6 bits for a (verbose) state
+# 6 bits for a (pressure) state
 # First four bits: either the capacity or if all zeroes then selecting the 2nd (base) option for the next 2 bits:
 # 00 -> up or o (empty)
 # 01 -> right or s (source)
 # 10 -> down or e (sink)
 # 11 -> left or x (wall)
 # Directional cells formatted as either u, r, d, l suffixed by a number 1-16 indicating the capacity/pressure at the cell, e.g. 'u12', 'd03', 'l11'
-def cellToBi(cell, verbose=False, row=-1, col=-1):
-    #Verbose version includes the capacities in 6 bit state output, otherwise it gives 3 bit concise version without capacity
-    if verbose:
+def cellToBi(cell, pressure=False, row=-1, col=-1):
+    #pressure version includes the capacities in 6 bit state output, otherwise it gives 3 bit concise version without capacity
+    if pressure:
       if cell == 'o':
           return 0b000000
       elif cell == 's':
@@ -64,9 +65,9 @@ def cellToBi(cell, verbose=False, row=-1, col=-1):
           
 # Input is binary representation of a cell, output is the character for that cell.
 # Currently this does not display if a cell is contracting or expanding
-def biToCell(bin, verbose=False):
-  # Verbose version includes the capacities in 6 bit state output, otherwise it gives 3 bit concise version without capacity
-  if verbose:
+def biToCell(bin, pressure=False):
+  # pressure version includes the capacities in 6 bit state output, otherwise it gives 3 bit concise version without capacity
+  if pressure:
     bin = bin % 0b1000000 
     if bin == 0b000000:
       return 'o'
@@ -116,9 +117,9 @@ def biToCell(bin, verbose=False):
               raise Exception(f'Invalid Binary: {bin:b}')
         
 # Method which takes a neighborhood state matrix and returns its numerical representation
-def stateToBi(nbrhd, isInputBinary=True, verbose=False):
+def stateToBi(nbrhd, isInputBinary=True, pressure=False):
   offset = 4
-  if verbose:
+  if pressure:
     offset += 3
 
   neighborhood = 0
@@ -132,15 +133,15 @@ def stateToBi(nbrhd, isInputBinary=True, verbose=False):
 
 # Method to iterate one tick of the CA, updating per the rulesets set within.
 # mat: binary matrix
-# verbose: tells method whether or not to use capacity model
-def cycle(mat, verbose = False):
+# pressure: tells method whether or not to use capacity model
+def cycle(mat, pressure = False):
     new_map = np.copy(mat)
     height = np.size(mat,0)
     width = np.size(mat,1)
 
     offset = 4
     contract_value = 0b1000
-    if verbose:
+    if pressure:
        offset += 3
        contract_value = 0b10000000 #TODO: CHECK TO MAKE SURE THIS VALUE IS RIGHT
 
@@ -165,7 +166,7 @@ def cycle(mat, verbose = False):
             bistate = stateToBi(cur_state) #find binary neighborhood state representation
 
             #Check if expansion vs contraction:
-            contract_bit = center >= 2**(offset-1) #total is 2^27 for nonverbose, 2^57 for verbose
+            contract_bit = center >= 2**(offset-1) #total is 2^27 for nonpressure, 2^57 for pressure
             u = 0b0100
             r = 0b0101
             d = 0b0110
@@ -237,101 +238,33 @@ def cycle(mat, verbose = False):
                 #     printNeighborhood(cur_state)
 
                 if (isLive(center) and
-                    ncount < 2 or # Simple rule if live cells only have less than two live neighbors
-                    # contraction rule 0. from ruleset spreadsheet:
-                    ((bistate & 68718489600) == 13743697920) or
-                    ((bistate & 4278251775) == 855650355) or
-                    ((bistate & 15794175) == 3158835) or
-                    ((bistate & 68466774000) == 13693354800) or
-                
-                     # contraction rule 1
-                    ((bistate & 68718489600) == 12938391552) or
-                    ((bistate & 4278251775) == 855638067) or
-                    ((bistate & 15794175) == 3158787) or
-                    ((bistate & 68466774000) == 13690209072) or
-
-                    # contraction rule 2
-                    ((bistate & 68718489600) == 53489664) or
-                    ((bistate & 4278251775) == 805306419) or
-                    ((bistate & 15794175) == 3158784) or
-                    ((bistate & 68466774000) == 13690208304) or
-
-                    # rule 2 flipped
-                    ((bistate & 68718489600) == 12888059904) or
-                    ((bistate & 4278251775) == 855638064) or
-                    ((bistate & 15794175) == 3158019) or
-                    ((bistate & 68466774000) == 805307184) or
-                
-                    # contraction rule 3
-                    ((bistate & 68718489600) == 3158016) or
-                    ((bistate & 4278251775) == 805306416) or
-                    ((bistate & 15794175) == 3158016) or
-                    ((bistate & 68466774000) == 805306416) or
-
-                    # contraction rule 4
-                    ((bistate & 68718489600) == 13743685632) or
-                    ((bistate & 4278251775) == 855650307) or
-                    ((bistate & 15794175) == 13107) or
-                    ((bistate & 68466774000) == 12888048432) or
-
-                    # rule 4 reflection
-                    ((bistate & 68718489600) == 13740552192) or
-                    ((bistate & 4278251775) == 50343987) or
-                    ((bistate & 15794175) == 3146547) or
-                    ((bistate & 68466774000) == 13693354752) or
+                    ncount < 2 or # Simple rule if live cells only have less than two live neighbors                   
+                    rules.check1(bistate) or
+                    rules.check2(bistate)):
                     
-                    # contraction rule 5
-                    ((bistate & 68718489600) == 13693366272) or
-                    ((bistate & 4278251775) == 855650352) or
-                    ((bistate & 15794175) == 3158067) or
-                    ((bistate & 68466774000) == 808452912) or
-
-                    # rule 5 reflection
-                    ((bistate & 68718489600) == 858796032) or
-                    ((bistate & 4278251775) == 805318707) or
-                    ((bistate & 15794175) == 3158832) or
-                    ((bistate & 68466774000) == 13693354032) or
-                    
-                    # contraction rule 6
-                    ((bistate & 68702760975) == 13740552195) or
-                    ((bistate & 251723775) == 50344755) or
-                    ((bistate & 64440242175) == 12888048435) or
-                    ((bistate & 68718432000) == 13743686400) or
-                    
-                    # contraction rule 7
-                    ((bistate & 68718489600) == 53477376) or
-                    ((bistate & 4278251775) == 805306371) or
-                    ((bistate & 15794175) == 13056) or
-                    ((bistate & 68466774000) == 12884901936) or
-
-                    #rule 7 reflection
-                    ((bistate & 68718489600) == 12884914176) or
-                    ((bistate & 4278251775) == 50331696) or
-                    ((bistate & 15794175) == 3145731) or
-                    ((bistate & 68466774000) == 805307136)):
                     # print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
                     new_map[i][j] = o
     return new_map
 
-def isLive(cell, verbose = False):
+def isLive(cell, pressure = False):
     contract = 0b1000
     cell = cell % contract
     return (cell >= 0b0100 and cell <= 0b0111)
 
-def mapToBi(map, verbose = False):
+def mapToBi(map, pressure = False):
     height = np.size(map,0)
     width = np.size(map,1)
     bimap = np.zeros((height, width), dtype=int)
-    if verbose: #aka if the pressure/capacity is included
-        raise Exception("Error, verbose mode not yet implemented")
+    if pressure: #aka if the pressure/capacity is included
+        raise Exception("Error, pressure mode not yet implemented")
     else: #only directional model
           for i in range(height):
             for j in range(width):
                    bimap[i][j] = cellToBi(map[i][j])
     return bimap
 
-def biToState(bi, verbose=False, isCheck=False):
-  if verbose:
+def biToState(bi, pressure=False, isCheck=False):
+  if pressure:
     offset = 0b10000000
     shift = 7
   else:
@@ -351,13 +284,13 @@ def biToState(bi, verbose=False, isCheck=False):
   return neighborhood
 
 # Used for debugging, prints a neighborhood given as parameter nbrhd
-def printNeighborhood(nbrhd, verbose=False):
+def printNeighborhood(nbrhd, pressure=False):
     for row in nbrhd:
-        print(biToCell(row[0], verbose) + biToCell(row[1], verbose) + biToCell(row[2], verbose))
+        print(biToCell(row[0], pressure) + biToCell(row[1], pressure) + biToCell(row[2], pressure))
     print()
 
 # Count the number of live cells in the neighborhood
-def neighborCount(nbrhd, verbose=False):
+def neighborCount(nbrhd, pressure=False):
     count = 0
     contract = 0b1000
     for i in range(3):

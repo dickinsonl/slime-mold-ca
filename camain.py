@@ -2,10 +2,10 @@ import caengine
 import time
 import numpy as np
 
-start_time = time.time()
+
 MAP_NAME = 'med2.txt'
 f = open(MAP_NAME, "r")
-num_cycles = 40
+num_cycles = 20
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 
 map = [0]*rows
@@ -51,12 +51,17 @@ def printMap(map, isInputBinary=True, printBinary=False):
             line = line + j + ' '
         print(line)
 
+start_time = time.time()
 bimap = caengine.mapToBi(map)
+print('Starting map: ')
 printMap(bimap, isInputBinary=True)
 for i in range(num_cycles): 
     bimap = caengine.cycle(bimap,)
+print('\nEnd map (decimal): ')
 print(bimap)
+print('\nEnd map (binary): ')
 printMap(bimap, isInputBinary=True, printBinary=True)
+print('\nEnd map (symbolic): ')
 printMap(bimap, isInputBinary=True, printBinary=False)
 
 #caengine.animate(2,50,map)

@@ -5,7 +5,7 @@ import numpy as np
 
 MAP_NAME = 'med2.txt'
 f = open(MAP_NAME, "r")
-num_cycles = 20
+num_cycles = 30
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 
 map = [0]*rows
@@ -54,9 +54,11 @@ def printMap(map, isInputBinary=True, printBinary=False):
 start_time = time.time()
 bimap = caengine.mapToBi(map)
 print('Starting map: ')
-printMap(bimap, isInputBinary=True)
+printMap(bimap, isInputBinary=True, printBinary=True)
 for i in range(num_cycles): 
     bimap = caengine.cycle(bimap,)
+    # print(f'tick {i}:')
+    # printMap(bimap, printBinary=True)
 print('\nEnd map (decimal): ')
 print(bimap)
 print('\nEnd map (binary): ')

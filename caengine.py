@@ -210,15 +210,16 @@ def cycle(mat, pressure = False):
                         new_map[i][j] = l # LEFT
 
                 #BRANCH TO PROPAGATE CONTRACTION SIGNAL:
-                elif ((center == u or center == r or center == d or center == l or center == s) and 
+                elif ((center == u or center == r or center == d or center == l) and 
                       ((0b0010 in cur_state[0] or 0b0010 in cur_state[1] or 0b0010 in cur_state[2]) or # checking if next to the sink
-                      (x >= contract_value for x in cur_state))): #checking if next to other contraction cell
+                      (any(x >= contract_value for row in cur_state for x in row)))): #checking if next to other contraction cell
                     # if (x >= contract_value for x in cur_state):
                     #     print(f'success to this one bugcheck')
                         
                             # for i in cur_state:
                             #     for x in cur_state[i]
                         # Contraction
+                    print(f'CONTRACT SIGNALLED AT {i},{j}; TRUTH VALUES: 1:{(0b0010 in cur_state[0] or 0b0010 in cur_state[1] or 0b0010 in cur_state[2])}, 2: {(x >= contract_value for x in cur_state)}')
                     new_map[i][j] = new_map[i][j] + contract_value
 
                 
@@ -240,7 +241,9 @@ def cycle(mat, pressure = False):
                 if (isLive(center) and
                     ncount < 2 or # Simple rule if live cells only have less than two live neighbors                   
                     rules.check1(bistate) or
-                    rules.check2(bistate)):
+                    rules.check2(bistate) or
+                    rules.check3(bistate)
+                    ):
                     
                     # print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
                     new_map[i][j] = o

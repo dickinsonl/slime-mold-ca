@@ -189,7 +189,8 @@ def check1(bistate):
             ((bistate & 68718489600) == 0) or
             ((bistate & 4278251775) == 0) or
             ((bistate & 15794175) == 0) or
-            ((bistate & 68466774000) == 0))
+            ((bistate & 68466774000) == 0)
+            )
 
 def check2(bistate):
     return (# contraction rule 21
@@ -382,4 +383,49 @@ def check2(bistate):
             ((bistate & 68702760975) == 0) or
             ((bistate & 251723775) == 0) or
             ((bistate & 64440242175) == 0) or
-            ((bistate & 68718432000) == 0))
+            ((bistate & 68718432000) == 0)
+            )
+
+def check3(bistate):
+    return (# contraction rule 41
+            ((bistate & 64425492480) == 60130328576) or
+            ((bistate & 252641280) == 252510208) or
+            ((bistate & 983055) == 917516) or
+            ((bistate & 986880) == 986368) or
+            
+            # rule 41 reflection
+            ((bistate & 252641280) == 235667456) or
+            ((bistate & 983055) == 851983) or
+            ((bistate & 986880) == 920576) or
+            ((bistate & 64425492480) == 55835557888) or
+            
+            # contraction rule 42
+            ((bistate & 4027514880) == 3758882816) or
+            ((bistate & 1044480) == 913408) or
+            ((bistate & 983280) == 917696) or
+            ((bistate & 16711680) == 14614528) or
+
+            # contraction rule 43
+            ((bistate & 252641280) == 235667456) or
+            ((bistate & 983055) == 851983) or
+            ((bistate & 986880) == 920576) or
+            ((bistate & 64425492480) == 55835557888) or
+
+            # rule 43 reflection
+            ((bistate & 64425492480) == 60130328576) or
+            ((bistate & 252641280) == 252510208) or
+            ((bistate & 983055) == 917516) or
+            ((bistate & 986880) == 986368) or
+
+            # contraction rule 44
+            ((bistate & 64425492480) == 55835361280) or
+            ((bistate & 252641280) == 235732992) or
+            ((bistate & 983055) == 917519) or
+            ((bistate & 986880) == 986112) or
+
+            # rule 44 reflection
+            ((bistate & 252641280) == 252444672) or
+            ((bistate & 983055) == 851980) or
+            ((bistate & 986880) == 920832) or
+            ((bistate & 64425492480) == 60130525184)
+            )

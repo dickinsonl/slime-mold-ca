@@ -4,6 +4,8 @@ import numpy as np
 
 
 MAP_NAME = 'med2.txt'
+PRESSURE_MODEL = False
+
 f = open(MAP_NAME, "r")
 num_cycles = 30
 cols = int(f.readline()) #int(input()) 
@@ -23,9 +25,9 @@ for i in range(rows):
 #       if map[i][j] == "*":
 #          samp.append([i,j])
 
-def printMap(map, isInputBinary=True, printBinary=False):
+def printMap(map, isInputBinary=True, printBinary=False, pressure=False):
     if isInputBinary:
-        if printBinary: 
+        if printBinary:
           # This is the only branch of the conditional that prints here, otherwise printing is done at the end
           for i in range(rows):
               for j in range(cols):
@@ -35,15 +37,15 @@ def printMap(map, isInputBinary=True, printBinary=False):
         newmap = np.empty((rows, cols), dtype=str)
         for i in range(rows):
             for j in range(cols):
-                newmap[i][j] = caengine.biToCell(map[i][j])
+                newmap[i][j] = caengine.biToCell(map[i][j], pressure=pressure)
                 #print(f'old: {map[i][j]:04b}, new:{newmap[i][j]}')
     elif printBinary:
         newmap = np.empty((rows, cols), dtype=int)
         for i in range(rows):
             for j in range(cols):
-                newmap[i][j] = caengine.cellToBi(map[i][j])
+                newmap[i][j] = caengine.cellToBi(map[i][j], pressure=pressure)
 
-    #Doing the actual printing            
+    #Doing the actual printing
     for i in range(rows):
         line = ''
         m = newmap if isInputBinary else map
@@ -54,17 +56,17 @@ def printMap(map, isInputBinary=True, printBinary=False):
 start_time = time.time()
 bimap = caengine.mapToBi(map)
 print('Starting map: ')
-printMap(bimap, isInputBinary=True, printBinary=True)
+printMap(bimap, isInputBinary=True, printBinary=True,)
 for i in range(num_cycles): 
-    bimap = caengine.cycle(bimap,)
+    bimap = caengine.cycle(bimap, pressure=PRESSURE_MODEL)
     # print(f'tick {i}:')
     # printMap(bimap, printBinary=True)
 print('\nEnd map (decimal): ')
 print(bimap)
 print('\nEnd map (binary): ')
-printMap(bimap, isInputBinary=True, printBinary=True)
+printMap(bimap, isInputBinary=True, printBinary=True, pressure=PRESSURE_MODEL)
 print('\nEnd map (symbolic): ')
-printMap(bimap, isInputBinary=True, printBinary=False)
+printMap(bimap, isInputBinary=True, printBinary=False, pressure=PRESSURE_MODEL)
 
 #caengine.animate(2,50,map)
 

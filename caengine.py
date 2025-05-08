@@ -249,7 +249,8 @@ def cycle(mat, pressure = False):
                     ncount < 2 or # Simple rule if live cells only have less than two live neighbors
                     rules.check1(bistate) or
                     rules.check2(bistate) or
-                    rules.check3(bistate)
+                    rules.check3(bistate) or 
+                    rules.check4(bistate)
                     ):
 
                     # print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
@@ -257,6 +258,7 @@ def cycle(mat, pressure = False):
     return new_map
     return new_map
 
+# takes in a binary representation of a cell and returns true if that cell is live, false otherwise
 def isLive(cell, pressure = False):
     if pressure:
         contract = 0b10000000
@@ -264,6 +266,17 @@ def isLive(cell, pressure = False):
         contract = 0b1000
     cell = cell % contract
     return (cell >= 0b0100 and cell <= 0b0111)
+
+# takes in binary state matrix and a list of cells numbers, returns true if the cells in the matrix at the given numbers (counting from left to right, top to bottom), false otherwise
+def areLive(cur_state, cells, pressure = False):
+    live = True
+    count = 1
+    for row in cur_state:
+        for i in row:
+            if count in cells and not isLive(i, pressure):
+                return False
+            count += 1
+
 
 def mapToBi(map, pressure = False):
     height = np.size(map,0)

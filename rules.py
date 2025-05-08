@@ -386,7 +386,7 @@ def check2(bistate):
             ((bistate & 68718432000) == 0)
             )
 
-def check3(bistate):
+def check3(bistate): #Dealing with loops
     return (# contraction rule 41
             ((bistate & 64425492480) == 60130328576) or
             ((bistate & 252641280) == 252510208) or
@@ -429,3 +429,100 @@ def check3(bistate):
             ((bistate & 986880) == 920832) or
             ((bistate & 64425492480) == 60130525184)
             )
+
+def check4(bistate): #Contracting open spaces from the edges
+    return(# contraction rule 45
+            ((bistate & 4278251535) == 50343939) or
+            ((bistate & 65535) == 819) or
+            ((bistate & 64440242160) == 12888048384) or
+            ((bistate & 68718428160) == 13740539904) or
+
+            # rule 45 reflections
+            ((bistate & 68466773760) == 12888048384) or
+            ((bistate & 68702760960) == 13740539904) or
+            ((bistate & 251719935) == 50343939) or
+            ((bistate & 15732735) == 819) or
+
+            # contraction rule 46
+            ((bistate & 4278251535) == 50343936) or
+            ((bistate & 65535) == 51) or
+            ((bistate & 64440242160) == 3146496) or
+            ((bistate & 68718428160) == 13690208256) or
+
+            # rule 46 reflections
+            ((bistate & 68466773760) == 12888047616) or
+            ((bistate & 68702760960) == 855638016) or
+            ((bistate & 251719935) == 12291) or
+            ((bistate & 15732735) == 816) or
+
+            # contraction rule 47
+            ((bistate & 4278251535) == 50331651) or
+            ((bistate & 65535) == 771) or
+            ((bistate & 64440242160) == 12884902656) or
+            ((bistate & 68718428160) == 12935233536) or
+
+            # rule 47 reflections
+            ((bistate & 68466773760) == 12884902656) or
+            ((bistate & 68702760960) == 12935233536) or
+            ((bistate & 251719935) == 50331651) or
+            ((bistate & 15732735) == 771) or
+
+            # contraction rule 48
+            ((bistate & 4278251535) == 50331648) or
+            ((bistate & 65535) == 3) or
+            ((bistate & 64440242160) == 768) or
+            ((bistate & 68718428160) == 12884901888) or
+
+            # rule 48 reflections
+            ((bistate & 68466773760) == 12884901888) or
+            ((bistate & 68702760960) == 50331648) or
+            ((bistate & 251719935) == 3) or
+            ((bistate & 15732735) == 768) or
+
+            # contraction rule 49
+            ((bistate & 4278251535) == 12291) or
+            ((bistate & 65535) == 816) or
+            ((bistate & 64440242160) == 12888047616) or
+            ((bistate & 68718428160) == 855638016) or
+
+            # rule 49 reflections
+            ((bistate & 68466773760) == 3146496) or
+            ((bistate & 68702760960) == 13690208256) or
+            ((bistate & 251719935) == 50343936) or
+            ((bistate & 15732735) == 51) or
+
+            # contraction rule 50
+            ((bistate & 4278251535) == 12288) or
+            ((bistate & 65535) == 48) or
+            ((bistate & 64440242160) == 3145728) or
+            ((bistate & 68718428160) == 805306368) or
+
+            # rule 50 reflections
+            ((bistate & 68466773760) == 3145728) or
+            ((bistate & 68702760960) == 805306368) or
+            ((bistate & 251719935) == 12288) or
+            ((bistate & 15732735) == 48) or
+
+            # contraction rule 51
+            ((bistate & 4278251535) == 3) or
+            ((bistate & 65535) == 768) or
+            ((bistate & 64440242160) == 12884901888) or
+            ((bistate & 68718428160) == 50331648) or
+
+            # rule 51 reflections
+            ((bistate & 68466773760) == 768) or
+            ((bistate & 68702760960) == 12884901888) or
+            ((bistate & 251719935) == 50331648) or
+            ((bistate & 15732735) == 3) or
+
+            # contraction rule 52
+            ((bistate & 4278251535) == 0) or
+            ((bistate & 65535) == 0) or
+            ((bistate & 64440242160) == 0) or
+            ((bistate & 68718428160) == 0) or
+
+            # rule 52 reflections
+            ((bistate & 68466773760) == 0) or
+            ((bistate & 68702760960) == 0) or
+            ((bistate & 251719935) == 0) or
+            ((bistate & 15732735) == 0))

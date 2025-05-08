@@ -3,11 +3,11 @@ import time
 import numpy as np
 
 
-MAP_NAME = 'med2.txt'
+MAP_NAME = 'med3.txt'
 PRESSURE_MODEL = False
 
 f = open(MAP_NAME, "r")
-num_cycles = 30
+num_cycles = 40
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 
 map = [0]*rows
@@ -26,12 +26,13 @@ for i in range(rows):
 #          samp.append([i,j])
 
 def printMap(map, isInputBinary=True, printBinary=False, pressure=False):
+    offset = 4 + (4*int(pressure))
     if isInputBinary:
         if printBinary:
           # This is the only branch of the conditional that prints here, otherwise printing is done at the end
           for i in range(rows):
               for j in range(cols):
-                  print(f"{map[i][j]:04b}", end=' ')
+                  print(f"{map[i][j]:0{offset}b}", end=' ')
               print()
           return
         newmap = np.empty((rows, cols), dtype=str)

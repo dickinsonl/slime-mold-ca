@@ -3,7 +3,7 @@ import time
 import numpy as np
 
 
-MAP_NAME = 'med3.txt'
+MAP_NAME = 'med2.txt'
 PRESSURE_MODEL = False
 
 f = open(MAP_NAME, "r")

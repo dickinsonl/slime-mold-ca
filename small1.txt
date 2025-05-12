@@ -2,5 +2,5 @@
 4
 o o s o
 o o o o
-o x o o
+o o o o
 o o e o

@@ -3,7 +3,7 @@ import time
 import numpy as np
 
 
-MAP_NAME = 'med3.txt'
+MAP_NAME = 'small1.txt'
 PRESSURE_MODEL = False
 
 f = open(MAP_NAME, "r")
@@ -56,14 +56,14 @@ def printMap(map, isInputBinary=True, printBinary=False, pressure=False):
 
 start_time = time.time()
 bimap = caengine.mapToBi(map)
-print('Starting map: ')
-printMap(bimap, isInputBinary=True, printBinary=True,)
+# print('Starting map: ')
+# printMap(bimap, isInputBinary=True, printBinary=True,)
 for i in range(num_cycles): 
     bimap = caengine.cycle(bimap, pressure=PRESSURE_MODEL)
     # print(f'tick {i}:')
     # printMap(bimap, printBinary=True)
-print('\nEnd map (decimal): ')
-print(bimap)
+# print('\nEnd map (decimal): ')
+# print(bimap)
 print('\nEnd map (binary): ')
 printMap(bimap, isInputBinary=True, printBinary=True, pressure=PRESSURE_MODEL)
 print('\nEnd map (symbolic): ')

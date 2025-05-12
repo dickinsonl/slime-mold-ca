@@ -3,11 +3,11 @@ import time
 import numpy as np
 
 
-MAP_NAME = 'small1.txt'
+MAP_NAME = 'med3.txt'
 PRESSURE_MODEL = False
 
 f = open(MAP_NAME, "r")
-num_cycles = 40
+num_cycles = 50
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 
 map = [0]*rows

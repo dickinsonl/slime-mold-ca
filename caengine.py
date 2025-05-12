@@ -249,8 +249,8 @@ def cycle(mat, pressure = False):
                     ncount < 2 or # Simple rule if live cells only have less than two live neighbors
                     rules.check1(bistate) or
                     rules.check2(bistate) or
-                    rules.check3(bistate) #or 
-                    #rules.check4(bistate, cur_state)
+                    rules.check3(bistate) or 
+                    rules.check4(bistate, cur_state)
                     ):
 
                     # print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')

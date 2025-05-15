@@ -131,7 +131,7 @@ def stateToBi(nbrhd, isInputBinary=True, pressure=False):
     for row in nbrhd:
         r += 1
         for i in row:
-            cell = ((i % 0b1000)) if isInputBinary else cellToBi(i, pressure=pressure, row=r, col=i)
+            cell = ((i % 0b10000)) if isInputBinary else cellToBi(i, pressure=pressure, row=r, col=i)
             neighborhood = (neighborhood << offset) + cell
     return neighborhood
 

@@ -70,21 +70,21 @@ def cellToBi(cell, pressure=False, row=-1, col=-1):
           
 # Input is binary representation of a cell, output is the character for that cell.
 # Currently this does not display if a cell is contracting or expanding
-def biToCell(binum, pressure=False):
+def biToCell(binum, pressure=False, row=-1, col=-1):
   # pressure version includes the capacities in 7 bit state output, otherwise it gives 3 bit concise version without capacity
   if pressure:
     binum = binum % 0b10000000 #Done to remove the contraction bit
-    if binum == 0b000000:
+    sym = binum % 0b1000
+    prefix = (str) (binum >> 3)
+    if sym == 0b000:
       return 'o'
-    elif binum == 0b000001:
+    elif sym == 0b001:
         return 's'
-    elif binum == 0b000010:
+    elif sym == 0b010:
         return 'e'
-    elif binum == 0b000011:
+    elif sym == 0b011:
         return 'x'
     else:
-        sym = binum % 0b1000
-        prefix = (str) (binum >> 3)
         if sym == 0b100:
           suffix = 'u'
         elif sym == 0b101:
@@ -94,9 +94,9 @@ def biToCell(binum, pressure=False):
         elif sym == 0b111:
           suffix = 'l'
         else:
-          print('Invalid direction')
-          return -1
-        return prefix + suffix
+          raise Exception(f'Invalid direction: sym = 0b{sym:03b} and binum = 0b{binum:07b} at: ({row},{col})')
+        #print(f'{prefix} + {suffix}, {"".join([prefix, suffix])}')
+        return "".join([prefix, suffix])    
   else: #Special characters (start with 0)
     binum = binum % 0b1000
     if binum == 0b000:
@@ -118,22 +118,22 @@ def biToCell(binum, pressure=False):
         elif binum == 0b111:
             return 'l'
         else:
-              raise Exception(f'Invalid Binary: {bin:b}')
+              raise Exception(f'Invalid Binary: {binum:0b}')
         
 # Method which takes a neighborhood state matrix and returns its numerical representation
 def stateToBi(nbrhd, isInputBinary=True, pressure=False):
-  offset = 4
-  if pressure:
-    offset += 3
-
-  neighborhood = 0
-  r = 0
-  for row in nbrhd:
-    r += 1
-    for i in row:
-        cell = i if isInputBinary else cellToBi(i, pressure=pressure, row=r, col=i)
-        neighborhood = (neighborhood << offset) + cell
-  return neighborhood
+    offset = 4
+    #   if pressure:
+    #     offset += 3
+    # at one point used to account for pressure, no longer
+    neighborhood = 0
+    r = 0
+    for row in nbrhd:
+        r += 1
+        for i in row:
+            cell = ((i % 0b1000)) if isInputBinary else cellToBi(i, pressure=pressure, row=r, col=i)
+            neighborhood = (neighborhood << offset) + cell
+    return neighborhood
 
 # Method to iterate one tick of the CA, updating per the rulesets set within.
 # mat: binary matrix
@@ -145,10 +145,9 @@ def cycle(mat, pressure = False):
     width = np.size(mat,1)
 
     offset = 3
-    #contract_value = 0b1000
     if pressure:
        offset += 4
-       #contract_value = 0b10000000 #TODO: CHECK TO MAKE SURE THIS VALUE IS RIGHT
+       
     contract_value = 2**(offset) # should be either 0b1000 (16) if directional or 0b10000000 (128) if pressure model
     #print(f'CHECKPOINT 1: mat:{mat}')
     for i in range(height):
@@ -165,7 +164,10 @@ def cycle(mat, pressure = False):
             dr = mat[i+1][j+1] if i < (height-1) and j < (width-1) else 0b011
             center = mat[i][j]
 
-            #Concat all of these starting with up, going clockwise, ending with the center
+            if pressure:
+                cur_pressure = getPressure(center)
+
+            # 2D list representing the neighborhood around the current cell
             cur_state = [[ul, up, ur], [left, center, right], [dl, down, dr]]
             # print('current state: ')
             # [print(x) for x in cur_state]
@@ -186,9 +188,10 @@ def cycle(mat, pressure = False):
                 # 10 -> down or e (sink)
                 # 11 -> left or x (wall)
 
-
+                # if pressure and center == s: # setting pressure at the source to the max value
+                #     new_map[i][j] = 0b1111000 + s
                 # RULES:
-                if biToCell(center) == 'o':
+                if (center == 0b000): #TODO: make sure it works when pressure = true
                     #print(f'(i,j): {i}, {j}, bistate & mask: {(bistate)}, Binary: {bin(bistate)}')
                     # Rule format is (bistate & mask) == check
                     if (((bistate & 983280) == 16) or
@@ -215,6 +218,13 @@ def cycle(mat, pressure = False):
                           ((bistate & 1044480) == 20480) or
                           ((bistate & 1044480) == 24576)):
                         new_map[i][j] = l # LEFT
+
+                    # set the current cells pressure value to the largest adjacent pressure minus 1
+                    if pressure and isLive(new_map[i][j]):
+                        new_max = getMaxPressure(cur_state) - 1
+                        print(f'max pressure setting {(new_max)} at {i},{j}')
+                        if new_max > 0:                           
+                            new_map[i][j] += (new_max << 3) 
 
                 #BRANCH TO PROPAGATE CONTRACTION SIGNAL:
                 elif ((center == u or center == r or center == d or center == l) and
@@ -244,7 +254,8 @@ def cycle(mat, pressure = False):
                 # if center == 0b1111:
                 #     print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68467757040):b}\ncheck:   {13694337840:b}')
                 #     printNeighborhood(cur_state)
-
+                print(f'check at {i},{j}: {rules.check4(bistate, cur_state)} for bistate = {bistate:036b} and cur_state =')
+                printNeighborhood(cur_state)
                 if (isLive(center) and
                     ncount < 2 or # Simple rule if live cells only have less than two live neighbors
                     rules.check1(bistate) or
@@ -278,13 +289,32 @@ def areLive(cur_state, cells, pressure = False):
             count += 1
     return True
 
+# Returns the pressure value for one cell, input as binary format
+def getPressure(cell):
+    return (cell % 0b10000000) >> 3 # modulo to remove contraction bit and then bit shift to remove cell type
+
+# takes in a cell neighborhood in binary format and returns the max pressure of any cell in the neighborhood
+def getMaxPressure(nbrhd):
+    max = -1
+    for row in nbrhd:
+        for cell in row:
+            p = getPressure(cell)
+            if p > max:
+                max = p
+    return max
 
 def mapToBi(map, pressure = False):
+    max_pressure = 0b1111
     height = np.size(map,0)
     width = np.size(map,1)
     bimap = np.zeros((height, width), dtype=int)
     if pressure: #aka if the pressure/capacity is included
-        raise Exception("Error, pressure mode not yet implemented")
+        for i in range(height):
+            for j in range(width):
+                    bimap[i][j] = cellToBi(map[i][j])
+                    if (bimap[i][j] == 0b001) or (bimap[i][j] == 0b010):
+                        bimap[i][j] += (max_pressure << 3)
+            
     else: #only directional model
           for i in range(height):
             for j in range(width):

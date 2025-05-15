@@ -201,12 +201,6 @@ def check2(bistate):
             ((bistate & 64440242175) == 12888048435) or
             ((bistate & 68718432000) == 13743686400) or
 
-            # rule 21 reflections
-            ((bistate & 68718432000) == 13743686400) or
-            ((bistate & 68702760975) == 13740552195) or
-            ((bistate & 251723775) == 50344755) or
-            ((bistate & 64440242175) == 12888048435) or
-
             # contraction rule 22
             ((bistate & 68702760975) == 13740552200) or
             ((bistate & 251723775) == 50346035) or
@@ -248,12 +242,6 @@ def check2(bistate):
             ((bistate & 251723775) == 50344760) or
             ((bistate & 64440242175) == 12888049715) or
             ((bistate & 68718432000) == 35218522880) or
-
-            # rule 25 reflections
-            ((bistate & 68718432000) == 35218522880) or
-            ((bistate & 68702760975) == 13824438275) or
-            ((bistate & 251723775) == 50344760) or
-            ((bistate & 64440242175) == 12888049715) or
 
             # contraction rule 26
             ((bistate & 68702760975) == 13824438280) or
@@ -309,12 +297,6 @@ def check2(bistate):
             ((bistate & 64440242175) == 12893291395) or
             ((bistate & 68718432000) == 15091106560) or
 
-            # rule 30 reflections
-            ((bistate & 68718432000) == 15091106560) or
-            ((bistate & 68702760975) == 15082749955) or
-            ((bistate & 251723775) == 50365315) or
-            ((bistate & 64440242175) == 12893291395) or
-
             # contraction rule 31
             ((bistate & 68702760975) == 15082749960) or
             ((bistate & 251723775) == 50366595) or
@@ -345,12 +327,6 @@ def check2(bistate):
             ((bistate & 64440242175) == 12893292675) or
             ((bistate & 68718432000) == 36565943040) or
 
-            # rule 33 reflections
-            ((bistate & 68718432000) == 36565943040) or
-            ((bistate & 68702760975) == 15166636035) or
-            ((bistate & 251723775) == 50365320) or
-            ((bistate & 64440242175) == 12893292675) or
-
             # contraction rule 34
             ((bistate & 68702760975) == 15166636040) or
             ((bistate & 251723775) == 50366600) or
@@ -368,12 +344,6 @@ def check2(bistate):
             ((bistate & 251723775) == 134232115) or
             ((bistate & 64440242175) == 34362884920) or
             ((bistate & 68718432000) == 13827573760) or
-
-            # rule 35 reflections
-            ((bistate & 68718432000) == 13827573760) or
-            ((bistate & 68702760975) == 35215388680) or
-            ((bistate & 251723775) == 134232115) or
-            ((bistate & 64440242175) == 34362884920) or
 
             # contraction rule 36
             ((bistate & 68702760975) == 35215409160) or
@@ -393,12 +363,6 @@ def check2(bistate):
             ((bistate & 64440242175) == 34362886200) or
             ((bistate & 68718432000) == 35302410240) or
 
-            # rule 37 reflections
-            ((bistate & 68718432000) == 35302410240) or
-            ((bistate & 68702760975) == 35299274760) or
-            ((bistate & 251723775) == 134232120) or
-            ((bistate & 64440242175) == 34362886200) or
-
             # contraction rule 38
             ((bistate & 68702760975) == 35299295240) or
             ((bistate & 251723775) == 134232200) or
@@ -417,23 +381,11 @@ def check2(bistate):
             ((bistate & 64440242175) == 34368127880) or
             ((bistate & 68718432000) == 15174993920) or
 
-            # rule 39 reflections
-            ((bistate & 68718432000) == 15174993920) or
-            ((bistate & 68702760975) == 36557586440) or
-            ((bistate & 251723775) == 134252675) or
-            ((bistate & 64440242175) == 34368127880) or
-
             # contraction rule 40
             ((bistate & 68702760975) == 36641472520) or
             ((bistate & 251723775) == 134252680) or
             ((bistate & 64440242175) == 34368129160) or
-            ((bistate & 68718432000) == 36649830400) or
-
-            # rule 40 reflections
-            ((bistate & 68718432000) == 36649830400) or
-            ((bistate & 68702760975) == 36641472520) or
-            ((bistate & 251723775) == 134252680) or
-            ((bistate & 64440242175) == 34368129160)
+            ((bistate & 68718432000) == 36649830400)
             )
 
 def check3(bistate): #Dealing with loops

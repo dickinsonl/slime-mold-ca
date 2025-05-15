@@ -3,11 +3,12 @@ import time
 import numpy as np
 
 
-MAP_NAME = 'med2.txt'
+MAP_NAME = 'small1.txt'
 PRESSURE_MODEL = False
+TICKS = 12
 
 f = open(MAP_NAME, "r")
-num_cycles = 50
+num_cycles = TICKS
 cols = int(f.readline()) #int(input()) 
 rows = int(f.readline()) #int(input()) 
 map = [0]*rows
@@ -35,16 +36,17 @@ def printMap(map, isInputBinary=True, printBinary=False, pressure=False):
                   print(f"{map[i][j]:0{offset}b}", end=' ')
               print()
           return
-        newmap = np.empty((rows, cols), dtype=str)
+        newmap = [[None for _ in range(cols)] for _ in range(rows)] 
         for i in range(rows):
             for j in range(cols):
-                newmap[i][j] = caengine.biToCell(map[i][j], pressure=pressure)
-                #print(f'old: {map[i][j]:04b}, new:{newmap[i][j]}')
+                #print(f'prelim {caengine.biToCell(map[i][j], pressure, i, j)}')
+                newmap[i][j] = caengine.biToCell(map[i][j], pressure, i, j)
+                #print(f'post {newmap[i][j]}')
     elif printBinary:
         newmap = np.empty((rows, cols), dtype=int)
         for i in range(rows):
             for j in range(cols):
-                newmap[i][j] = caengine.cellToBi(map[i][j], pressure=pressure)
+                newmap[i][j] = caengine.cellToBi(map[i][j], pressure, i, j)
 
     #Doing the actual printing
     for i in range(rows):
@@ -55,9 +57,9 @@ def printMap(map, isInputBinary=True, printBinary=False, pressure=False):
         print(line)
 
 start_time = time.time()
-bimap = caengine.mapToBi(map)
-# print('Starting map: ')
-# printMap(bimap, isInputBinary=True, printBinary=True,)
+bimap = caengine.mapToBi(map, pressure=PRESSURE_MODEL)
+print('Starting map: ')
+printMap(bimap, isInputBinary=True, printBinary=True,)
 for i in range(num_cycles): 
     bimap = caengine.cycle(bimap, pressure=PRESSURE_MODEL)
     # print(f'tick {i}:')

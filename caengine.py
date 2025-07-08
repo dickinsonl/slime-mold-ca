@@ -187,6 +187,7 @@ def cycle(mat, pressure = False):
                 # 01 -> right or s (source)
                 # 10 -> down or e (sink)
                 # 11 -> left or x (wall)
+                # 2^2 bit is set to 1 for directions and 0 for other cells
 
                 # if pressure and center == s: # setting pressure at the source to the max value
                 #     new_map[i][j] = 0b1111000 + s
@@ -254,14 +255,14 @@ def cycle(mat, pressure = False):
                 # if center == 0b1111:
                 #     print(f'bistate: {bistate:b}\nmasked:  {(bistate & 68467757040):b}\ncheck:   {13694337840:b}')
                 #     printNeighborhood(cur_state)
-                print(f'check at {i},{j}: {rules.check4(bistate, cur_state)} for bistate = {bistate:036b} and cur_state =')
-                printNeighborhood(cur_state)
+                #print(f'check at {i},{j}: {rules.check4(bistate, cur_state)} for bistate = {bistate:036b} and cur_state =')
+                #printNeighborhood(cur_state)
                 if (isLive(center) and
                     ncount < 2 or # Simple rule if live cells only have less than two live neighbors
-                    rules.check1(bistate) or
-                    rules.check2(bistate) or
-                    rules.check3(bistate) or 
-                    rules.check4(bistate, cur_state)
+                    rules.hat(bistate) or #hat 
+                    rules.corner2(bistate, cur_state) or #corner
+                    rules.antiloop2(bistate) or #antiloop
+                    rules.knight2(bistate, cur_state) #knights move
                     ):
 
                     # print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
@@ -279,7 +280,7 @@ def isLive(cell, pressure = False):
     return (cell >= 0b0100 and cell <= 0b0111) or (cell == 0b0001) or (cell == 0b0010)
 
 # takes in binary state matrix and a list of cells numbers, returns true if the cells in the matrix at the given numbers (counting from left to right, top to bottom), false otherwise
-def areLive(cur_state, cells, pressure = False):
+def areLive(cur_state, cells = [1,2,3,4,5,6,7,8,9], pressure = False):
     live = True
     count = 1
     for row in cur_state:
@@ -312,7 +313,7 @@ def mapToBi(map, pressure = False):
         for i in range(height):
             for j in range(width):
                     bimap[i][j] = cellToBi(map[i][j])
-                    if (bimap[i][j] == 0b001) or (bimap[i][j] == 0b010):
+                    if (bimap[i][j] == 0b001) or (bimap[i][j] == 0b010): #if source or sink
                         bimap[i][j] += (max_pressure << 3)
             
     else: #only directional model
@@ -334,14 +335,13 @@ def biToState(bi, pressure=False, isCheck=False):
   neighborhood = [['','',''],
                   ['','',''],
                   ['','','']]
-  for j in [2,1,0]:
-    row = neighborhood[j]
-    for i in [2,1,0]:
+  for i in [2,1,0]:
+    for j in [2,1,0]:
         bicell = bi % offset
         bi = bi >> shift
         cell = biToCell(bicell, isCheck)
         #print(f"Cell: {cell}")
-        row[i] = cell
+        neighborhood[i][j] = cell
   return neighborhood
 
 # Used for debugging, prints a neighborhood given as 3x3 list parameter nbrhd

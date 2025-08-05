@@ -1,0 +1,5 @@
+15
+3
+x o o o o o o o o o o o o x x
+s o x x x x x x x x x x x o e
+x o o o o o o o o o o o o x x

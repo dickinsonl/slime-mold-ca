@@ -6,9 +6,9 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.colors import ListedColormap
 from matplotlib.patches import Patch
 
-MAP_NAME = 'larger1'
+MAP_NAME = 'larger3'
 PRESSURE_MODEL = False
-TICKS = 224
+TICKS = 250
 
 f = open(f'maps/{MAP_NAME}.txt', "r")
 num_cycles = TICKS
@@ -67,11 +67,11 @@ def stateToVis():
     return visual_grid
 
 def animUpdate(frame):
-    mid = 97
-    if(frame == 0 or frame == int(mid/2) or frame == mid):
-        plt.savefig(f'imgs/exp_{MAP_NAME}_{frame:03d}.png')
-    if(frame == int((((TICKS-mid))*0.333)+mid) or frame == int(((TICKS-mid)*0.667)+mid) or frame == TICKS-1):
-        plt.savefig(f'imgs/cont_{MAP_NAME}_{frame:03d}.png')
+    mid = 16
+    # if(frame == 0 or frame == int(mid/2) or frame == mid):
+    #     plt.savefig(f'imgs/exp_{MAP_NAME}_{frame:03d}.png')
+    # if(frame == int((((TICKS-mid))*0.333)+mid) or frame == int(((TICKS-mid)*0.667)+mid) or frame == TICKS-1):
+    #     plt.savefig(f'imgs/cont_{MAP_NAME}_{frame:03d}.png')
     global current_grid
     visual_grid = stateToVis()
     img.set_array(visual_grid)
@@ -172,7 +172,9 @@ printMap(bimap, isInputBinary=True, printBinary=False,)
 
 animation = FuncAnimation(fig, animUpdate, frames=TICKS, interval=40, blit=False, repeat=False)
 
-plt.tight_layout()
-plt.show()
-
-# animation.save(f'animations/smca_{MAP_NAME}_{end_time}.mp4', writer='ffmpeg', fps=5, dpi=300)
+#set conditional to 1 to display animation, 0 to save animation
+if 1 : 
+    plt.tight_layout()
+    plt.show()
+else:
+    animation.save(f'animations/smca_{MAP_NAME}_{end_time}.mp4', writer='ffmpeg', fps=5, dpi=300)

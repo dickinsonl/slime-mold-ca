@@ -7,6 +7,58 @@ import re
 #from IPython.display import HTML
 #import matplotlib.animation as animation
 
+# Input is binary representation of a cell, output is the character for that cell.
+# Currently this does not display if a cell is contracting or expanding
+def biToCell(binum, pressure=False, row=-1, col=-1):
+  # pressure version includes the capacities in 7 bit state output, otherwise it gives 3 bit concise version without capacity
+  if pressure:
+    binum = binum % 0b10000000 #Done to remove the contraction bit
+    sym = binum % 0b1000
+    prefix = (str) (binum >> 3)
+    if sym == 0b000:
+      return 'o'
+    elif sym == 0b001:
+        return 's'
+    elif sym == 0b010:
+        return 'e'
+    elif sym == 0b011:
+        return 'x'
+    else:
+        if sym == 0b100:
+          suffix = 'u'
+        elif sym == 0b101:
+          suffix = 'r'
+        elif sym == 0b110:
+          suffix = 'd'
+        elif sym == 0b111:
+          suffix = 'l'
+        else:
+          raise Exception(f'Invalid direction: sym = 0b{sym:03b} and binum = 0b{binum:07b} at: ({row},{col})')
+        #print(f'{prefix} + {suffix}, {"".join([prefix, suffix])}')
+        return "".join([prefix, suffix])    
+  else: #Special characters (start with 0)
+    binum = binum % 0b1000
+    if binum == 0b000:
+        return 'o'
+    elif binum == 0b001:
+        return 's'
+    elif binum == 0b010:
+        return 'e'
+    elif binum == 0b011:
+        return 'x'
+    else: #Directions (start with 1)
+        #binum = binum[0]
+        if binum == 0b100:
+            return 'u'
+        elif binum == 0b101:
+            return 'r'
+        elif binum == 0b110:
+            return 'd'
+        elif binum == 0b111:
+            return 'l'
+        else:
+              raise Exception(f'Invalid Binary: {binum:0b}')
+
 # Function which takes in a cell state and returns a binary literal of that state
 # 6 bits for a (pressure) state
 # First four bits: either the capacity or if all zeroes then selecting the 2nd (base) option for the next 2 bits:
@@ -68,57 +120,7 @@ def cellToBi(cell, pressure=False, row=-1, col=-1):
             else:
                 raise Exception(f'Invalid Symbol: {cell} at ({row}, {col})')
           
-# Input is binary representation of a cell, output is the character for that cell.
-# Currently this does not display if a cell is contracting or expanding
-def biToCell(binum, pressure=False, row=-1, col=-1):
-  # pressure version includes the capacities in 7 bit state output, otherwise it gives 3 bit concise version without capacity
-  if pressure:
-    binum = binum % 0b10000000 #Done to remove the contraction bit
-    sym = binum % 0b1000
-    prefix = (str) (binum >> 3)
-    if sym == 0b000:
-      return 'o'
-    elif sym == 0b001:
-        return 's'
-    elif sym == 0b010:
-        return 'e'
-    elif sym == 0b011:
-        return 'x'
-    else:
-        if sym == 0b100:
-          suffix = 'u'
-        elif sym == 0b101:
-          suffix = 'r'
-        elif sym == 0b110:
-          suffix = 'd'
-        elif sym == 0b111:
-          suffix = 'l'
-        else:
-          raise Exception(f'Invalid direction: sym = 0b{sym:03b} and binum = 0b{binum:07b} at: ({row},{col})')
-        #print(f'{prefix} + {suffix}, {"".join([prefix, suffix])}')
-        return "".join([prefix, suffix])    
-  else: #Special characters (start with 0)
-    binum = binum % 0b1000
-    if binum == 0b000:
-        return 'o'
-    elif binum == 0b001:
-        return 's'
-    elif binum == 0b010:
-        return 'e'
-    elif binum == 0b011:
-        return 'x'
-    else: #Directions (start with 1)
-        #binum = binum[0]
-        if binum == 0b100:
-            return 'u'
-        elif binum == 0b101:
-            return 'r'
-        elif binum == 0b110:
-            return 'd'
-        elif binum == 0b111:
-            return 'l'
-        else:
-              raise Exception(f'Invalid Binary: {binum:0b}')
+
         
 # Method which takes a neighborhood state matrix and returns its numerical representation
 def stateToBi(nbrhd, isInputBinary=True, pressure=False):
@@ -249,7 +251,6 @@ def cycle(mat, pressure = False):
                 # 10 -> down or e (sink)
                 # 11 -> left or x (wall)
                 o = 0b1000
-                e = 0b0010
                 ncount = neighborCount(cur_state)
 
                 # if center == 0b1111:

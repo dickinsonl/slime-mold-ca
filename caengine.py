@@ -7,6 +7,15 @@ import re
 #from IPython.display import HTML
 #import matplotlib.animation as animation
 
+o = 0b000
+s = 0b001
+e = 0b010
+x = 0b011
+u = 0b100
+r = 0b101
+d = 0b110
+l = 0b111
+
 # Input is binary representation of a cell, output is the character for that cell.
 # Currently this does not display if a cell is contracting or expanding
 def biToCell(binum, pressure=False, row=-1, col=-1):
@@ -15,22 +24,22 @@ def biToCell(binum, pressure=False, row=-1, col=-1):
     binum = binum % 0b10000000 #Done to remove the contraction bit
     sym = binum % 0b1000
     prefix = (str) (binum >> 3)
-    if sym == 0b000:
+    if sym == o:
       return 'o'
-    elif sym == 0b001:
+    elif sym == s:
         return 's'
-    elif sym == 0b010:
+    elif sym == e:
         return 'e'
-    elif sym == 0b011:
+    elif sym == x:
         return 'x'
     else:
-        if sym == 0b100:
+        if sym == u:
           suffix = 'u'
-        elif sym == 0b101:
+        elif sym == r:
           suffix = 'r'
-        elif sym == 0b110:
+        elif sym == d:
           suffix = 'd'
-        elif sym == 0b111:
+        elif sym == l:
           suffix = 'l'
         else:
           raise Exception(f'Invalid direction: sym = 0b{sym:03b} and binum = 0b{binum:07b} at: ({row},{col})')
@@ -38,23 +47,23 @@ def biToCell(binum, pressure=False, row=-1, col=-1):
         return "".join([prefix, suffix])    
   else: #Special characters (start with 0)
     binum = binum % 0b1000
-    if binum == 0b000:
+    if binum == o:
         return 'o'
-    elif binum == 0b001:
+    elif binum == s:
         return 's'
-    elif binum == 0b010:
+    elif binum == e:
         return 'e'
-    elif binum == 0b011:
+    elif binum == x:
         return 'x'
     else: #Directions (start with 1)
         #binum = binum[0]
-        if binum == 0b100:
+        if binum == u:
             return 'u'
-        elif binum == 0b101:
+        elif binum == r:
             return 'r'
-        elif binum == 0b110:
+        elif binum == d:
             return 'd'
-        elif binum == 0b111:
+        elif binum == l:
             return 'l'
         else:
               raise Exception(f'Invalid Binary: {binum:0b}')
@@ -72,13 +81,13 @@ def cellToBi(cell, pressure=False, row=-1, col=-1):
     if pressure:
 
         if cell == 'o':
-            return 0b000000
+            return o
         elif cell == 's':
-            return 0b000001
+            return s
         elif cell == 'e':
-            return 0b000010
+            return e
         elif cell == 'x':
-            return 0b000011
+            return x
         else:
             elements = re.findall(r'(\d+)(\w)', cell)[0]
             capacity = int (elements[0])
@@ -88,35 +97,35 @@ def cellToBi(cell, pressure=False, row=-1, col=-1):
 
             prefix = capacity << 3
             if dir == 'u':
-                suffix = 0b100
+                suffix = u
             elif dir == 'r':
-                suffix = 0b110
+                suffix = r
             elif dir == 'd':
-                suffix = 0b110
+                suffix = d
             elif dir == 'l':
-                suffix = 0b111
+                suffix = l
             else:
                 print('Invalid direction')
                 return -1
             return prefix + suffix
     else: #Special cellstates (start with 0)
         if cell == 'o':
-            return 0b000
+            return o
         elif cell == 's':
-            return 0b001
+            return s
         elif cell == 'e':
-            return 0b010
+            return e
         elif cell == 'x':
-            return 0b011
+            return x
         else: #Directions(start with 1)
             if cell == 'u':
-                return 0b100
+                return u
             elif cell == 'r':
-                return 0b101
+                return r
             elif cell == 'd':
-                return 0b110
+                return d
             elif cell == 'l':
-                return 0b111
+                return l
             else:
                 raise Exception(f'Invalid Symbol: {cell} at ({row}, {col})')
           
@@ -154,16 +163,17 @@ def cycle(mat, pressure = False):
     #print(f'CHECKPOINT 1: mat:{mat}')
     for i in range(height):
         for j in range(width):
-            #Use strings for now i guess but should possibly change these to binary later for speed
-            up = mat[i-1][j] if i > 0 else 0b011 #binary for a wall
-            down = mat[i+1][j] if i < (height-1) else 0b011
-            left = mat[i][j-1] if j > 0 else 0b011
-            right = mat[i][j+1] if j < (width-1) else 0b011
+            
+            #Edges padded with walls
+            up = mat[i-1][j] if i > 0 else x 
+            down = mat[i+1][j] if i < (height-1) else x
+            left = mat[i][j-1] if j > 0 else x
+            right = mat[i][j+1] if j < (width-1) else x
             #ul = upper left, etc
-            ul = mat[i-1][j-1] if i > 0 and j > 0 else 0b011
-            ur = mat[i-1][j+1] if j < (width-1) and i > 0 else 0b011
-            dl = mat[i+1][j-1] if j > 0 and i < (height-1) else 0b011
-            dr = mat[i+1][j+1] if i < (height-1) and j < (width-1) else 0b011
+            ul = mat[i-1][j-1] if i > 0 and j > 0 else x
+            ur = mat[i-1][j+1] if j < (width-1) and i > 0 else x
+            dl = mat[i+1][j-1] if j > 0 and i < (height-1) else x
+            dr = mat[i+1][j+1] if i < (height-1) and j < (width-1) else x
             center = mat[i][j]
 
             if pressure:
@@ -178,11 +188,7 @@ def cycle(mat, pressure = False):
 
             #Check if expansion vs contraction:
             contract_bit = center >= contract_value  #total is 2^27 for nonpressure, 2^57 for pressure
-            u = 0b0100
-            r = 0b0101
-            d = 0b0110
-            l = 0b0111
-            s = 0b0001
+            
             if not contract_bit: #In effect, checking to see if first bit is set to 0 (for expansion) or 1 (for contraction)
                 # Cheatsheet:
                 # 00 -> up or o (empty)
@@ -231,7 +237,7 @@ def cycle(mat, pressure = False):
 
                 #BRANCH TO PROPAGATE CONTRACTION SIGNAL:
                 elif ((center == u or center == r or center == d or center == l) and
-                      ((0b0010 in cur_state[0] or 0b0010 in cur_state[1] or 0b0010 in cur_state[2]) or # checking if next to the sink
+                      ((e in cur_state[0] or e in cur_state[1] or e in cur_state[2]) or # checking if next to the sink
                       (any(x >= contract_value for row in cur_state for x in row)))): #checking if next to other contraction cell
                     # if (x >= contract_value for x in cur_state):
                     #     print(f'success to this one bugcheck')
@@ -250,7 +256,6 @@ def cycle(mat, pressure = False):
                 # 01 -> right or s (source)
                 # 10 -> down or e (sink)
                 # 11 -> left or x (wall)
-                o = 0b1000
                 ncount = neighborCount(cur_state)
 
                 # if center == 0b1111:
@@ -278,7 +283,7 @@ def isLive(cell, pressure = False):
     else:
         contract = 0b1000
     cell = cell % contract
-    return (cell >= 0b0100 and cell <= 0b0111) or (cell == 0b0001) or (cell == 0b0010)
+    return (cell >= 0b0100 and cell <= 0b0111) or (cell == s) or (cell == e)
 
 # takes in binary state matrix and a list of cells numbers, returns true if the cells in the matrix at the given numbers (counting from left to right, top to bottom), false otherwise
 def areLive(cur_state, cells = [1,2,3,4,5,6,7,8,9], pressure = False):
@@ -358,8 +363,7 @@ def neighborCount(nbrhd, pressure=False):
     for i in range(3):
         for j in range(3):
             if i != 1 or j != 1:
-                n = nbrhd[i][j] % contract
-                if (n >= 0b100 and n <= 0b111) or (n == 0b10 or n == 0b01):
+                if isLive(nbrhd[i][j]):
                     count += 1
     return count
 #WIP:

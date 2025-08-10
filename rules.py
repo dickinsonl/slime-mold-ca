@@ -1,193 +1,193 @@
 import caengine
 
 def hat(bistate):
-    return (# contraction
+    return (# contraction part 1
             ((bistate & 68718489600) == 13743697920) or
             ((bistate & 4278251775) == 855650355) or
             ((bistate & 15794175) == 3158835) or
             ((bistate & 68466774000) == 13693354800) or
 
-            # contraction
+            # contraction part 2
             ((bistate & 68718489600) == 13743718400) or
             ((bistate & 4278251775) == 855650435) or
             ((bistate & 15794175) == 8401715) or
             ((bistate & 68466774000) == 15035532080) or
 
-            # reflection
+            # part 2 reflections
             ((bistate & 68718489600) == 13748940800) or
             ((bistate & 4278251775) == 2197827635) or
             ((bistate & 15794175) == 3179315) or
             ((bistate & 68466774000) == 13693354880) or
 
-            # contraction
+            # contraction part 3
             ((bistate & 68718489600) == 13748961280) or
             ((bistate & 4278251775) == 2197827715) or
             ((bistate & 15794175) == 8422195) or
             ((bistate & 68466774000) == 15035532160) or
 
-            # contraction
+            # contraction part 4
             ((bistate & 68718489600) == 13827584000) or
             ((bistate & 4278251775) == 855650360) or
             ((bistate & 15794175) == 3160115) or
             ((bistate & 68466774000) == 35168191280) or
 
-            # reflection
+            # part 4 reflections
             ((bistate & 68718489600) == 35218534400) or
             ((bistate & 4278251775) == 939536435) or
             ((bistate & 15794175) == 3158840) or
             ((bistate & 68466774000) == 13693356080) or
 
-            # contraction
+            # contraction part 5
             ((bistate & 68718489600) == 13827604480) or
             ((bistate & 4278251775) == 855650440) or
             ((bistate & 15794175) == 8402995) or
             ((bistate & 68466774000) == 36510368560) or
 
-            # reflection
+            # part 5 reflections
             ((bistate & 68718489600) == 35223777280) or
             ((bistate & 4278251775) == 2281713715) or
             ((bistate & 15794175) == 3179320) or
             ((bistate & 68466774000) == 13693356160) or
 
-            # contraction
+            # contraction part 6
             ((bistate & 68718489600) == 13832826880) or
             ((bistate & 4278251775) == 2197827640) or
             ((bistate & 15794175) == 3180595) or
             ((bistate & 68466774000) == 35168191360) or
 
-            # reflection
+            # part 6 reflections
             ((bistate & 68718489600) == 35218554880) or
             ((bistate & 4278251775) == 939536515) or
             ((bistate & 15794175) == 8401720) or
             ((bistate & 68466774000) == 15035533360) or
 
-            # contraction
+            # contraction part 7
             ((bistate & 68718489600) == 13832847360) or
             ((bistate & 4278251775) == 2197827720) or
             ((bistate & 15794175) == 8423475) or
             ((bistate & 68466774000) == 36510368640) or
 
-            # reflection
+            # part 7 reflections
             ((bistate & 68718489600) == 35223797760) or
             ((bistate & 4278251775) == 2281713795) or
             ((bistate & 15794175) == 8422200) or
             ((bistate & 68466774000) == 15035533440) or
 
-            # contraction
+            # contraction part 8
             ((bistate & 68718489600) == 15085875200) or
             ((bistate & 4278251775) == 855670835) or
             ((bistate & 15794175) == 3158915) or
             ((bistate & 68466774000) == 13698597680) or
 
-            # contraction
+            # contraction part 9
             ((bistate & 68718489600) == 15085895680) or
             ((bistate & 4278251775) == 855670915) or
             ((bistate & 15794175) == 8401795) or
             ((bistate & 68466774000) == 15040774960) or
 
-            # reflection
+            # part 9 reflections
             ((bistate & 68718489600) == 15091118080) or
             ((bistate & 4278251775) == 2197848115) or
             ((bistate & 15794175) == 3179395) or
             ((bistate & 68466774000) == 13698597760) or
 
-            # contraction0
+            # contraction part 10
             ((bistate & 68718489600) == 15091138560) or
             ((bistate & 4278251775) == 2197848195) or
             ((bistate & 15794175) == 8422275) or
             ((bistate & 68466774000) == 15040775040) or
 
-            # contraction1
+            # contraction part 11
             ((bistate & 68718489600) == 15169761280) or
             ((bistate & 4278251775) == 855670840) or
             ((bistate & 15794175) == 3160195) or
             ((bistate & 68466774000) == 35173434160) or
 
-            #1 reflection
+            # part 11 reflections
             ((bistate & 68718489600) == 36560711680) or
             ((bistate & 4278251775) == 939556915) or
             ((bistate & 15794175) == 3158920) or
             ((bistate & 68466774000) == 13698598960) or
 
-            # contraction2
+            # contraction part 12
             ((bistate & 68718489600) == 15169781760) or
             ((bistate & 4278251775) == 855670920) or
             ((bistate & 15794175) == 8403075) or
             ((bistate & 68466774000) == 36515611440) or
 
-            #2 reflection
+            # part 12 reflections
             ((bistate & 68718489600) == 36565954560) or
             ((bistate & 4278251775) == 2281734195) or
             ((bistate & 15794175) == 3179400) or
             ((bistate & 68466774000) == 13698599040) or
 
-            # contraction3
+            # contraction part 13
             ((bistate & 68718489600) == 15175004160) or
             ((bistate & 4278251775) == 2197848120) or
             ((bistate & 15794175) == 3180675) or
             ((bistate & 68466774000) == 35173434240) or
 
-            #3 reflection
+            # part 13 reflections
             ((bistate & 68718489600) == 36560732160) or
             ((bistate & 4278251775) == 939556995) or
             ((bistate & 15794175) == 8401800) or
             ((bistate & 68466774000) == 15040776240) or
 
-            # contraction4
+            # contraction part 14
             ((bistate & 68718489600) == 15175024640) or
             ((bistate & 4278251775) == 2197848200) or
             ((bistate & 15794175) == 8423555) or
             ((bistate & 68466774000) == 36515611520) or
 
-            #4 reflection
+            # part 14 reflections
             ((bistate & 68718489600) == 36565975040) or
             ((bistate & 4278251775) == 2281734275) or
             ((bistate & 15794175) == 8422280) or
             ((bistate & 68466774000) == 15040776320) or
 
-            # contraction5
+            # contraction part 15
             ((bistate & 68718489600) == 35302420480) or
             ((bistate & 4278251775) == 939536440) or
             ((bistate & 15794175) == 3160120) or
             ((bistate & 68466774000) == 35168192560) or
 
-            # contraction6
+            # contraction part 16
             ((bistate & 68718489600) == 35302440960) or
             ((bistate & 4278251775) == 939536520) or
             ((bistate & 15794175) == 8403000) or
             ((bistate & 68466774000) == 36510369840) or
 
-            #6 reflection
+            # part 16 reflections
             ((bistate & 68718489600) == 35307663360) or
             ((bistate & 4278251775) == 2281713720) or
             ((bistate & 15794175) == 3180600) or
             ((bistate & 68466774000) == 35168192640) or
 
-            # contraction7
+            # contraction part 17
             ((bistate & 68718489600) == 35307683840) or
             ((bistate & 4278251775) == 2281713800) or
             ((bistate & 15794175) == 8423480) or
             ((bistate & 68466774000) == 36510369920) or
 
-            # contraction8
+            # contraction part 18
             ((bistate & 68718489600) == 36644597760) or
             ((bistate & 4278251775) == 939556920) or
             ((bistate & 15794175) == 3160200) or
             ((bistate & 68466774000) == 35173435440) or
 
-            # contraction9
+            # contraction part 19
             ((bistate & 68718489600) == 36644618240) or
             ((bistate & 4278251775) == 939557000) or
             ((bistate & 15794175) == 8403080) or
             ((bistate & 68466774000) == 36515612720) or
 
-            #9 reflection
+            # part 19 reflections
             ((bistate & 68718489600) == 36649840640) or
             ((bistate & 4278251775) == 2281734200) or
             ((bistate & 15794175) == 3180680) or
             ((bistate & 68466774000) == 35173435520) or
 
-            # contraction0
+            # contraction part 20
             ((bistate & 68718489600) == 36649861120) or
             ((bistate & 4278251775) == 2281734280) or
             ((bistate & 15794175) == 8423560) or
@@ -581,6 +581,201 @@ def corner2(bistate, state):
         (((bistate & 251723775) == 134252680) and caengine.areLive(cur_state=state, cells=[1,2,4])) or
         (((bistate & 64440242175) == 34368129160) and caengine.areLive(cur_state=state, cells=[2,3,6])) or
         (((bistate & 68718432000) == 36649830400) and caengine.areLive(cur_state=state, cells=[6,8,9])))
+
+def corner3(bistate, state):
+    return (
+        # contraction
+        (((bistate & 68702760975) == 13740552195) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50344755) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12888048435) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 13743686400) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # contraction
+        (((bistate & 68702760975) == 13740552200) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50346035) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34362884915) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 13827572480) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # reflection
+        (((bistate & 68718432000) == 13743687680) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 35215388675) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134230835) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12888048440) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction
+        (((bistate & 68702760975) == 13740572675) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50344835) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12893291315) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 15085863680) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # reflection
+        (((bistate & 68718432000) == 13748929280) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 15082729475) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50365235) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12888048515) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction
+        (((bistate & 68702760975) == 13740572680) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50346115) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34368127795) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 15169749760) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # reflection
+        (((bistate & 68718432000) == 13748930560) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 36557565955) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134251315) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12888048520) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction
+        (((bistate & 68702760975) == 13824438275) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50344760) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12888049715) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 35218522880) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # contraction
+        (((bistate & 68702760975) == 13824438280) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50346040) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34362886195) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 35302408960) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # reflection
+        (((bistate & 68718432000) == 35218524160) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 35299274755) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134230840) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12888049720) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction
+        (((bistate & 68702760975) == 13824458755) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50344840) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12893292595) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 36560700160) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # reflection
+        (((bistate & 68718432000) == 35223765760) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 15166615555) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50365240) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12888049795) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction
+        (((bistate & 68702760975) == 13824458760) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50346120) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34368129075) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 36644586240) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # reflection
+        (((bistate & 68718432000) == 35223767040) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 36641452035) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134251320) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12888049800) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction0
+        (((bistate & 68702760975) == 15082729480) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50366515) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34362884995) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 13832815360) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        #0 reflection
+        (((bistate & 68718432000) == 15085864960) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 35215409155) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134230915) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12893291320) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction1
+        (((bistate & 68702760975) == 15082749955) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50365315) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12893291395) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 15091106560) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # contraction2
+        (((bistate & 68702760975) == 15082749960) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50366595) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34368127875) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 15174992640) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        #2 reflection
+        (((bistate & 68718432000) == 15091107840) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 36557586435) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134251395) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12893291400) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction3
+        (((bistate & 68702760975) == 15166615560) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50366520) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34362886275) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 35307651840) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        #3 reflection
+        (((bistate & 68718432000) == 36560701440) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 35299295235) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134230920) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12893292600) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction4
+        (((bistate & 68702760975) == 15166636035) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50365320) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12893292675) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 36565943040) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # contraction5
+        (((bistate & 68702760975) == 15166636040) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 50366600) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34368129155) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 36649829120) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        #5 reflection
+        (((bistate & 68718432000) == 36565944320) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 36641472515) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134251400) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 12893292680) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction6
+        (((bistate & 68702760975) == 35215388680) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134232115) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34362884920) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 13827573760) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # contraction7
+        (((bistate & 68702760975) == 35215409160) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134232195) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34368127800) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 15169751040) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        #7 reflection
+        (((bistate & 68718432000) == 13832816640) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 36557565960) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134252595) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34362885000) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction8
+        (((bistate & 68702760975) == 35299274760) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134232120) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34362886200) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 35302410240) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # contraction9
+        (((bistate & 68702760975) == 35299295240) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134232200) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34368129080) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 36644587520) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        #9 reflection
+        (((bistate & 68718432000) == 35307653120) and caengine.areLive(cur_state=state, cells=[9])) or
+        (((bistate & 68702760975) == 36641452040) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134252600) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34362886280) and caengine.areLive(cur_state=state, cells=[3])) or
+
+        # contraction0
+        (((bistate & 68702760975) == 36557586440) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134252675) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34368127880) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 15174993920) and caengine.areLive(cur_state=state, cells=[9])) or
+
+        # contraction1
+        (((bistate & 68702760975) == 36641472520) and caengine.areLive(cur_state=state, cells=[7])) or
+        (((bistate & 251723775) == 134252680) and caengine.areLive(cur_state=state, cells=[1])) or
+        (((bistate & 64440242175) == 34368129160) and caengine.areLive(cur_state=state, cells=[3])) or
+        (((bistate & 68718432000) == 36649830400) and caengine.areLive(cur_state=state, cells=[9])))
+
 
 def antiloop1(bistate): #Dealing with loops
     return (# contraction1

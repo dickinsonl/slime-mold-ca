@@ -266,13 +266,13 @@ def cycle(mat, pressure = False):
                 if (isLive(center) and
                     ncount < 2 or # Simple rule if live cells only have less than two live neighbors
                     rules.hat(bistate) or #hat 
-                    rules.corner2(bistate, cur_state) or #corner
+                    rules.corner3(bistate, cur_state) or #corner
                     rules.antiloop2(bistate) or #antiloop
                     rules.knight2(bistate, cur_state) #knights move
                     ):
 
                     # print(f'{biToCell(new_map[i][j])}, ncount:{ncount}')
-                    new_map[i][j] = o
+                    new_map[i][j] = 0b1000 #This instead of o because it needs to be contraction cell
     return new_map
 
 

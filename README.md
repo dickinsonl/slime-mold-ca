@@ -1,6 +1,8 @@
 # slime-mold-ca
 Slime Mold Cellular Automata Master's Thesis
 
+This program is a simulation of the behavior of the *Physarum Polycephalum* slime mold's behavior of finding the shortest path through a maze, using cellular automata.
+
 In order to run the code, type 
 ```
 python camain.py
